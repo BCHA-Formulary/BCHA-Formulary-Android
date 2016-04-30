@@ -27,7 +27,7 @@ public class SplashScreenActivity extends Activity {
 	CSVparser masterList = null;
 	GenericDrugList genericList;
 	BrandDrugList brandList;
-	
+
 	int PAUSE_MILLISECONDS = 500;
 
 	public AssetManager assetManager;
@@ -45,36 +45,21 @@ public class SplashScreenActivity extends Activity {
 		new Handler().postDelayed(new Runnable(){
 			@Override
 			public void run(){
-				if(!settings.getBoolean(Utilities.authorizedUser, false)){
-					Intent validationActivity = new Intent(SplashScreenActivity.this, FirstTimeActivity.class);
-					startActivityForResult(validationActivity, 1);
-				} 
-				else {
-					initializeApp();
-					finish();
-				}
+				initializeApp();
+				finish();
 			}
 		}, PAUSE_MILLISECONDS);
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if(requestCode == 1 && resultCode == RESULT_OK)
-		{
-			initializeApp();
-			finish();
-		}
-	}
-
 	private void initializeApp(){
 		assetManager = getAssets();
-
+		//TODO start progress bar here
 		boolean updateRequired = (this.getCurrentFileVersion().equals(this.getLatestFileVersion())) ? false : true;
 
 		if (updateRequired) {
 			performUpdate();
 		}
-
+		//TODO stop progress bar here
 		System.out.println("Initializing app in splash screen");
 
 		Intent searchActivity = new Intent(this, MainActivity.class);
@@ -133,8 +118,8 @@ public class SplashScreenActivity extends Activity {
 		try {
 
 			fileVersion
-			.execute(
-					"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AAD2BXYQ0oB-i1RLnCYAnA7na/update.txt?dl=1").get();
+					.execute(
+							"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AAD2BXYQ0oB-i1RLnCYAnA7na/update.txt?dl=1").get();
 
 			fis = openFileInput("fileVersion.txt");
 			reader = new BufferedReader(new InputStreamReader(fis));
@@ -176,18 +161,18 @@ public class SplashScreenActivity extends Activity {
 				final DownloadTask downloadFormulary = new DownloadTask(
 						SplashScreenActivity.this, "formularyUpdated.csv");
 				downloadFormulary
-				.execute(
-						"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AABotiW6CP_-JrGAh0mw1nkma/formulary.csv?dl=1").get();
+						.execute(
+								"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AABotiW6CP_-JrGAh0mw1nkma/formulary.csv?dl=1").get();
 				final DownloadTask downloadExcluded = new DownloadTask(
 						SplashScreenActivity.this, "excludedUpdated.csv");
 				downloadExcluded
-				.execute(
-						"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AAAh2jkw2watr9KpopeH_JUsa/excluded.csv?dl=1").get();
+						.execute(
+								"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AAAh2jkw2watr9KpopeH_JUsa/excluded.csv?dl=1").get();
 				final DownloadTask downloadRestricted = new DownloadTask(
 						SplashScreenActivity.this, "restrictedUpdated.csv");
 				downloadRestricted
-				.execute(
-						"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AACa_xqMx2PZWMoWKe5tJoRda/restricted.csv?dl=1").get();
+						.execute(
+								"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AACa_xqMx2PZWMoWKe5tJoRda/restricted.csv?dl=1").get();
 
 				// We need an Editor object to make preference changes.
 				// All objects are from android.context.Context
@@ -195,7 +180,7 @@ public class SplashScreenActivity extends Activity {
 				editor.putBoolean("filesDownloaded", true);
 				editor.commit();
 				Toast.makeText(this, "Update completed", Toast.LENGTH_LONG)
-				.show();
+						.show();
 			}
 			catch(Exception e)
 			{
@@ -206,7 +191,7 @@ public class SplashScreenActivity extends Activity {
 					this,
 					"A version update is available, please connect to wi-fi "
 							+ "and restart to app to update",
-							Toast.LENGTH_LONG).show();
+					Toast.LENGTH_LONG).show();
 		}
 
 	}
