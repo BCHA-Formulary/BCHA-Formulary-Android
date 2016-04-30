@@ -1,4 +1,4 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

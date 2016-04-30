@@ -1,4 +1,4 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Model;
 
 public class GenericExcludedDrug extends GenericDrug {
 	public StringBuilder criteria;

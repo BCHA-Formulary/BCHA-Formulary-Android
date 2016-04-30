@@ -1,4 +1,4 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Model;
 
 public class Drug {
 	protected String status;

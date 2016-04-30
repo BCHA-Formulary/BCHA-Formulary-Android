@@ -1,4 +1,4 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.lowermainlandpharmacyservices.lmpsformulary.R;
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
 
 public class DisplayOtherResult extends Activity {
 

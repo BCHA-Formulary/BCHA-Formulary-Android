@@ -1,14 +1,11 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +15,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
+
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.CSVparser;
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.DownloadTask;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandDrugList;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericDrugList;
+import com.lowermainlandpharmacyservices.lmpsformulary.R;
 
 public class SplashScreenActivity extends Activity {
 

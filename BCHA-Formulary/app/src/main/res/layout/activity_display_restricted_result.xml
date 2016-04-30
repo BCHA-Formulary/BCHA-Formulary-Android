@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="com.lowermainlandpharmacyservices.lmpsformulary.DisplayRestrictedResult" >
+    tools:context=".Activity.DisplayRestrictedResult" >
 
     <TextView
         android:id="@+id/restricted_drug_genericname"

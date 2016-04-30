@@ -1,4 +1,4 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -7,6 +7,8 @@ import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.lowermainlandpharmacyservices.lmpsformulary.R;
 
 public class HelpActivity extends Activity {
 	@Override

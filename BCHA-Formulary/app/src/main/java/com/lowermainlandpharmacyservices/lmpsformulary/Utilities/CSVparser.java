@@ -1,4 +1,4 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +7,14 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandDrugList;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandExcludedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandFormularyDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandRestrictedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericDrugList;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericExcludedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericFormularyDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericRestrictedDrug;
 import com.opencsv.CSVReader;
 
 public class CSVparser {

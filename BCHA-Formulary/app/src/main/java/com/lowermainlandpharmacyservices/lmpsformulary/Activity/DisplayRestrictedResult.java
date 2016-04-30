@@ -1,22 +1,27 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class DisplayFormularyResult extends Activity {
+import com.lowermainlandpharmacyservices.lmpsformulary.R;
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
+
+public class DisplayRestrictedResult extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_display_formulary_result);
+		setContentView(R.layout.activity_display_restricted_result);
 		getActionBar().hide();
+
 		Intent intent = getIntent();
 		String type = intent.getStringExtra(Utilities.EXTRA_TYPE);
 		String name = "";
@@ -29,13 +34,12 @@ public class DisplayFormularyResult extends Activity {
 			name = intent.getStringExtra(Utilities.EXTRA_GENERICNAME);
 			otherNames = intent
 					.getStringArrayListExtra(Utilities.EXTRA_BRANDNAME);
-			System.out.println("brand names total = " + otherNames.size());
 			System.out.println("gothere");
 
 //			for (String s : otherNames) {
 //				otherNamesAsString += "\t" + "\t" + "- " + s + "\n";
 //			}
-			
+
 			if(!otherNames.isEmpty() && !otherNames.get(0).trim().equals("")){
 				for (String s : otherNames) {
 					otherNamesAsString += "\t" + "\t" + "- " + s + "\n";
@@ -44,7 +48,6 @@ public class DisplayFormularyResult extends Activity {
 			else {
 				otherNamesAsString += "\t" + "\t" + "\t" + "No alternative names" + "\n";
 			}
-
 		} else if (type.equals("Brand")) {
 			genericbrandtitle = "Generic Names:";
 			name = intent.getStringExtra(Utilities.EXTRA_BRANDNAME);
@@ -54,6 +57,7 @@ public class DisplayFormularyResult extends Activity {
 //			for (String s : otherNames) {
 //				otherNamesAsString += "\t" + "\t" + "- " + s + "\n";
 //			}
+
 			if(!otherNames.isEmpty() && !otherNames.get(0).trim().equals("")){
 				for (String s : otherNames) {
 					otherNamesAsString += "\t" + "\t" + "- " + s + "\n";
@@ -62,10 +66,10 @@ public class DisplayFormularyResult extends Activity {
 			else {
 				otherNamesAsString += "\t" + "\t" + "\t" + "No alternative names" + "\n";
 			}
-
 		}
+
 		// Search Name
-		TextView genericNameTextView = (TextView) findViewById(R.id.formulary_drug_genericname);
+		TextView genericNameTextView = (TextView) findViewById(R.id.restricted_drug_genericname);
 		genericNameTextView.setText("\t" + name);
 		genericNameTextView.setTypeface(null, Typeface.BOLD);
 
@@ -73,27 +77,28 @@ public class DisplayFormularyResult extends Activity {
 		TextView nameHeaderTextView = (TextView) findViewById(R.id.generic_or_brand);
 		nameHeaderTextView.setText(genericbrandtitle);
 
-		TextView brandNameTextView = (TextView) findViewById(R.id.formulary_brandnames);
+		TextView brandNameTextView = (TextView) findViewById(R.id.restricted_brandnames);
 		brandNameTextView.setText(otherNamesAsString);
 		brandNameTextView.setTextSize(20);
 
-		// Create strength text view
-		ArrayList<String> input = intent
-				.getStringArrayListExtra(Utilities.EXTRA_STRENGTHS);
-		String strengths = "";
-		for (String s : input) {
-			strengths += "\t" + "\t" + "- " + s + "\n";
-		}
+		// Status
+		TextView statusTextView = (TextView) findViewById(R.id.restricted);
+		statusTextView.setText("\t" + "\t" + "RESTRICTED");
+		statusTextView.setTextSize(20);
+		statusTextView.setTextColor(Color.parseColor("#CC0000"));
+		statusTextView.setTypeface(null, Typeface.BOLD);
 
-		TextView strengthTextView = (TextView) findViewById(R.id.formulary_strength);
-		strengthTextView.setText(strengths);
-		strengthTextView.setTextSize(20);
+		// Restriction Criteria
+		String criteria = intent.getStringExtra(Utilities.EXTRA_RESTRICTIONS);
+		TextView criteriaTextView = (TextView) findViewById(R.id.restriction_criteria);
+		criteriaTextView.setText(criteria);
+		criteriaTextView.setTextSize(15);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.display_formulary_result, menu);
+		getMenuInflater().inflate(R.menu.display_restricted_result, menu);
 		return true;
 	}
 

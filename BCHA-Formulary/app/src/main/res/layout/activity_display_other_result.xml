@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="com.lowermainlandpharmacyservices.lmpsformulary.DisplayOtherResult" >
+    tools:context=".Activity.DisplayOtherResult" >
 
     <TextView
         android:id="@+id/notfound"

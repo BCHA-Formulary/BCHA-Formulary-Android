@@ -1,4 +1,4 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +20,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.CSVparser;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandDrugList;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandExcludedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandFormularyDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandRestrictedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.Drug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericDrugList;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericExcludedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericFormularyDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericRestrictedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.R;
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
 
 public class MainActivity extends Activity {
 

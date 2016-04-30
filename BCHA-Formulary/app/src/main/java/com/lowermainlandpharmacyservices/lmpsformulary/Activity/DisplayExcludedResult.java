@@ -1,4 +1,4 @@
-package com.lowermainlandpharmacyservices.lmpsformulary;
+package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
 import java.util.ArrayList;
 
@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.lowermainlandpharmacyservices.lmpsformulary.R;
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
 
 public class DisplayExcludedResult extends Activity {
 

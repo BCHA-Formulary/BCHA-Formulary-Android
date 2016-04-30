@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="com.lowermainlandpharmacyservices.lmpsformulary.HelpActivity" >
+    tools:context=".Activity.HelpActivity" >
 
     <TextView
         android:layout_width="match_parent"

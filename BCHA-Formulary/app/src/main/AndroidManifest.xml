@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".Activity.SplashScreenActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,26 +27,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" >
+        <activity android:name=".Activity.MainActivity" >
         </activity>
         <activity
-            android:name=".DisplayFormularyResult"
+            android:name=".Activity.DisplayFormularyResult"
             android:label="@string/title_activity_display_formulary_result" >
         </activity>
         <activity
-            android:name=".DisplayRestrictedResult"
+            android:name=".Activity.DisplayRestrictedResult"
             android:label="@string/title_activity_display_restricted_result" >
         </activity>
         <activity
-            android:name=".DisplayExcludedResult"
+            android:name=".Activity.DisplayExcludedResult"
             android:label="@string/title_activity_display_excluded_result" >
         </activity>
         <activity
-            android:name=".DisplayOtherResult"
+            android:name=".Activity.DisplayOtherResult"
             android:label="@string/title_activity_display_other_result" >
         </activity>
         <activity
-            android:name=".HelpActivity"
+            android:name=".Activity.HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>
     </application>

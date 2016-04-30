@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="#ffffff"
-    tools:context="com.lowermainlandpharmacyservices.lmpsformulary.SplashScreenActivity" >
+    tools:context=".Activity.SplashScreenActivity" >
     
     <ImageView
         android:layout_width="match_parent"
