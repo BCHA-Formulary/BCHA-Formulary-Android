@@ -14,4 +14,7 @@ public final class Utilities {
 	public static String EXTRA_RESTRICTIONS = "com.lowermainlandpharmacyservices.MainActivity.RESTRICTIONS";
 	public static String EXTRA_EXCLUDED_REASON = "com.lowermainlandpharmacyservices.MainActivity.EXCLUDED_REASON";
 	public static String EXTRA_TYPE = "TYPE";
+
+	//Firebase
+	public static final String firebaseRoot = "https://bcha-formulary.firebaseio.com/";
 }

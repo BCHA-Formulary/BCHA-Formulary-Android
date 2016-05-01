@@ -6,8 +6,17 @@ public class GenericDrug extends Drug {
 	public String genericName;
 	public ArrayList<String> brandNames;
 
-	public GenericDrug(String genericName, String brandName, String status) {
-		super(status); // superconstructor Drug
+//	public GenericDrug(String genericName, String brandName, String status) {
+//		super(status); // superconstructor Drug
+//
+//		this.genericName = genericName;
+//
+//		brandNames = new ArrayList<String>();
+//		brandNames.add(brandName);
+//	}
+
+	public GenericDrug(String genericName, String brandName, String status, String drugClass) {
+		super(status, drugClass); // superconstructor Drug
 
 		this.genericName = genericName;
 

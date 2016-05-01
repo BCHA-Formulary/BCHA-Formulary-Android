@@ -6,8 +6,8 @@ public class GenericFormularyDrug extends GenericDrug {
 	public ArrayList<String> strengths;
 
 	public GenericFormularyDrug(String genericName, String brandName,
-			String strength) {
-		super(genericName, brandName, "Formulary");
+			String strength, String drugClass) {
+		super(genericName, brandName, "Formulary", drugClass);
 
 		strengths = new ArrayList<String>();
 		strengths.add(strength);

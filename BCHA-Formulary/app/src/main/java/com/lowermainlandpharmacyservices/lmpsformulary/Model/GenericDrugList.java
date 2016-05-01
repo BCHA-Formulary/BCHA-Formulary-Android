@@ -54,4 +54,8 @@ public class GenericDrugList {
 		return nameList;
 	}
 
+    public HashMap<String, Drug> getGenericDrugList(){
+        return genericDrugList;
+    }
+
 }

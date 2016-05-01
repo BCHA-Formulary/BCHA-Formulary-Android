@@ -7,8 +7,8 @@ public class BrandFormularyDrug extends BrandDrug {
 	public ArrayList<String> strengths;
 
 	public BrandFormularyDrug(String genericName, String brandName,
-			String strength) {
-		super(genericName, brandName, "Formulary");
+			String strength, String drugClass) {
+		super(genericName, brandName, "Formulary", drugClass);
 		strengths = new ArrayList<String>();
 		strengths.add(strength);
 	}

@@ -7,12 +7,18 @@ public class BrandDrug extends Drug {
 	public String brandName;
 	public ArrayList<String> genericNames;
 
-	public BrandDrug(String genericName, String brandName, String status) {
-		super(status);
-		this.genericNames = new ArrayList<String>();
-		this.genericNames.add(genericName);
-		this.brandName = brandName;
-	}
+//	public BrandDrug(String genericName, String brandName, String status) {
+//		super(status);
+//		this.genericNames = new ArrayList<String>();
+//		this.genericNames.add(genericName);
+//		this.brandName = brandName;
+//	}
+public BrandDrug(String genericName, String brandName, String status, String drugClass) {
+	super(status, drugClass);
+	this.genericNames = new ArrayList<String>();
+	this.genericNames.add(genericName);
+	this.brandName = brandName;
+}
 
 	public String getBrandName() {
 		return brandName;
