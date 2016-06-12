@@ -1,14 +1,14 @@
 
-# Created by https://www.gitignore.io/api/android,intellij
+# Created by https://www.gitignore.io/api/android,gradle,intellij
 
 ### Android ###
 # Built application files
 *.apk
 *.ap_
-*/.idea
+*/.idea/*
 */app.iml
 
-# Files for the Dalvik VM
+# Files for the ART/Dalvik VM
 *.dex
 
 # Java class files
@@ -40,6 +40,10 @@ captures/
 
 # Intellij
 *.iml
+.idea/workspace.xml
+
+# Keystore files
+*.jks
 
 ### Android Patch ###
 gen-external-apklibs
@@ -90,3 +94,26 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+### Intellij Patch ###
+# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+
+# *.iml
+# modules.xml
+
+
+### Gradle ###
+.gradle
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+*/gradle/wrapper/gradle-wrapper.properties
