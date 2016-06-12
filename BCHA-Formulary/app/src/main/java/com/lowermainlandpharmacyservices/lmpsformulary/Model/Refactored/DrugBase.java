@@ -5,10 +5,10 @@ package com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored;
  */
 public class DrugBase {
     public String status;
-    public DrugClass drugClass;
+    public String drugClass;
     public DrugType drugType;
 
-    public DrugBase(String status, DrugClass drugClass, DrugType drugType){
+    public DrugBase(String status, String drugClass, DrugType drugType){
         this.status = status;
         this.drugClass = drugClass;
         this.drugType = drugType;
@@ -23,11 +23,11 @@ public class DrugBase {
         this.status = status;
     }
 
-    public DrugClass getDrugClass() {
+    public String getDrugClass() {
         return drugClass;
     }
 
-    public void setDrugClass(DrugClass drugClass) {
+    public void setDrugClass(String drugClass) {
         this.drugClass = drugClass;
     }
 

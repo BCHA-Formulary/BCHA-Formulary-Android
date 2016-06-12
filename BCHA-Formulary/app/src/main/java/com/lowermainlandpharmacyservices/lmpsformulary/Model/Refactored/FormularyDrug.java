@@ -14,7 +14,7 @@ public class FormularyDrug extends DrugBase{
 
     //Constructor - altName list and strength list are provided
     public FormularyDrug(String primaryName, NameType nameType,
-                         List<String> alternateName, List<String> strengths, String status, DrugType drugType, DrugClass drugClass){
+                         List<String> alternateName, List<String> strengths, String status, DrugType drugType, String drugClass){
         super(status, drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
@@ -24,7 +24,7 @@ public class FormularyDrug extends DrugBase{
 
     //Constructor - only one alt name and one strength are provided
     public FormularyDrug(String primaryName, NameType nameType,
-                         String alternateName, String strengths, String status, DrugType drugType, DrugClass drugClass){
+                         String alternateName, String strengths, String status, DrugType drugType, String drugClass){
         super(status, drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
@@ -36,7 +36,7 @@ public class FormularyDrug extends DrugBase{
 
     //Constructor - no alt name and no strength provided
     public FormularyDrug(String primaryName, NameType nameType,
-                         String status, DrugType drugType, DrugClass drugClass){
+                         String status, DrugType drugType, String drugClass){
         super(status, drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
