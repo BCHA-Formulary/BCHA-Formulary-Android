@@ -4,8 +4,8 @@ public class GenericRestrictedDrug extends GenericDrug {
 	public StringBuilder criteria;
 
 	public GenericRestrictedDrug(String genericName, String brandName,
-			String criteria) {
-		super(genericName, brandName, "Restricted");
+			String criteria, String drugClass) {
+		super(genericName, brandName, "Restricted", drugClass);
 		this.criteria = new StringBuilder(criteria);
 	}
 

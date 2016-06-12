@@ -51,4 +51,7 @@ public class BrandDrugList {
 		return nameList;
 	}
 
+    public HashMap<String, Drug> getBrandDrugList(){
+        return brandDrugList;
+    }
 }
