@@ -16,6 +16,7 @@ public class FormularyDrug extends DrugBase{
     public FormularyDrug(String primaryName, NameType nameType,
                          List<String> alternateName, List<String> strengths, DrugType drugType, String drugClass){
         super(drugClass, drugType);
+
         this.primaryName = primaryName;
         this.nameType = nameType;
         this.alternateName = alternateName;

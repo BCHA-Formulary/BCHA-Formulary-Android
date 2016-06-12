@@ -14,8 +14,8 @@ public class RestrictedDrug extends DrugBase {
 
     //Constructor - altName list
     public RestrictedDrug(String primaryName, NameType nameType,
-                        List<String> alternateName, String criteria, String status, DrugType drugType, String drugClass){
-        super(status, drugClass, drugType);
+                        List<String> alternateName, String criteria, String status, DrugType drugType, List<String> drugClass){
+        super(drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
         this.alternateName = alternateName;
@@ -24,8 +24,8 @@ public class RestrictedDrug extends DrugBase {
 
     //Constructor - only one alt name provided
     public RestrictedDrug(String primaryName, NameType nameType,
-                        String alternateName, String criteria, String status, DrugType drugType, String drugClass){
-        super(status, drugClass, drugType);
+                        String alternateName, String criteria, String status, DrugType drugType, List<String> drugClass){
+        super(drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
         this.alternateName = new ArrayList<String>();
@@ -35,8 +35,8 @@ public class RestrictedDrug extends DrugBase {
 
     //Constructor - no alt name and no strength provided
     public RestrictedDrug(String primaryName, NameType nameType, String criteria,
-                        String status, DrugType drugType, String drugClass){
-        super(status, drugClass, drugType);
+                        String status, DrugType drugType, List<String> drugClass){
+        super(drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
         this.criteria = criteria;

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandDrugList;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandExcludedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandFormularyDrug;
@@ -33,6 +36,9 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class MainActivity extends Activity {
 
@@ -54,10 +60,12 @@ public class MainActivity extends Activity {
 		getActionBar().hide();
 		
 		System.out.println("search activity started");
-		
-		Intent intent = getIntent();
 
-		System.out.println("retrieved intent");
+		// Write a message to the database
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference myRef = database.getReference("message");
+
+		myRef.setValue("Hello, World!");
 		
 //		beginParsing();
 		
@@ -286,69 +294,69 @@ public class MainActivity extends Activity {
 		startActivity(helpResult);
 	}
 
-//    public void firebase(View view){
-//        CSVparser masterList = new CSVparser();
-//        try {
+    public void firebase(View view){
+        CSVparser masterList = new CSVparser();
+        try {
 //            masterList.parseFormulary(getAssets().open("formulary class 31Mar2016.csv"));
-//            masterList.parseExcluded(getAssets().open("excluded class 31Mar2016.csv"));
+            masterList.parseExcluded(getAssets().open("excluded class 31Mar2016.csv"));
 //            masterList.parseRestricted(getAssets().open("restricted class 31Mar2016.csv"));
-//
-//            Log.d("Formuarly parsed", "Count: " + masterList.getListByGeneric().getDrugListSize());
-//
-//            HashMap<String, Drug> formularyList = new HashMap<String, Drug>();
-//            HashMap<String, Drug> excludedList = new HashMap<String, Drug>();
-//            HashMap<String, Drug> restrictedList = new HashMap<String, Drug>();
-//
-//            for(Map.Entry<String, Drug> drug :masterList.getListByGeneric().getGenericDrugList().entrySet()){
-//                String drugName = drug.getKey();
-//                Drug drugObj = drug.getValue();
-//
-//                if(drugObj.getStatus().equals("Formulary") && !drugName.equals("")){
-//                    formularyList.put(UUID.randomUUID().toString(), drugObj);
-////                    formularyList.put(drugName, drugObj);
-//                }
-//                if(drugObj.getStatus().equals("Excluded") && !drugName.equals("")){
-//                    excludedList.put(UUID.randomUUID().toString(), drugObj);
-////                    excludedList.put(drugName, drugObj);
-//                }
-//                if(drugObj.getStatus().equals("Restricted") && !drugName.equals("")){
-//                    restrictedList.put(UUID.randomUUID().toString(), drugObj);
-////                    restrictedList.put(drugName, drugObj);
-//                }
-//            }
-//
-//            for(Map.Entry<String, Drug> drug :masterList.getListByBrand().getBrandDrugList().entrySet()){
-//                String drugName = drug.getKey();
-//                Drug drugObj = drug.getValue();
-//
-//                if(drugObj.getStatus().equals("Formulary") && !drugName.equals("")){
-//                    formularyList.put(UUID.randomUUID().toString(), drugObj);
-////                    formularyList.put(drugName, drugObj);
-//                }
-//                if(drugObj.getStatus().equals("Excluded") && !drugName.equals("")){
-//                    excludedList.put(UUID.randomUUID().toString(), drugObj);
-////                    excludedList.put(drugName, drugObj);
-//                }
-//                if(drugObj.getStatus().equals("Restricted") && !drugName.equals("")){
-//                    restrictedList.put(UUID.randomUUID().toString(), drugObj);
-////                    restrictedList.put(drugName, drugObj);
-//                }
-//            }
-//
-//            Log.d("Formulary", "Count: " + formularyList.size());
-//            Log.d("Excluded", "Count: " + excludedList.size());
-//            Log.d("Restricted", "Count: " + restrictedList.size());
-//
-//            Firebase firebase = new Firebase(Utilities.firebaseRoot);
-//            firebase.child("Formulary").setValue(formularyList);
-//            firebase.child("Excluded").setValue(excludedList);
-//            firebase.child("Restricted").setValue(restrictedList);
-//            firebase.child("Update").setValue(new Date());
-//        }
-//        catch (IOException e){
-//            Log.d("Formulary parse error", e.getMessage());
-//        }
-//
-//    }
+
+            Log.d("Formuarly parsed", "Count: " + masterList.getListByGeneric().getDrugListSize());
+
+            HashMap<String, Drug> formularyList = new HashMap<String, Drug>();
+            HashMap<String, Drug> excludedList = new HashMap<String, Drug>();
+            HashMap<String, Drug> restrictedList = new HashMap<String, Drug>();
+
+            for(Map.Entry<String, Drug> drug :masterList.getListByGeneric().getGenericDrugList().entrySet()){
+                String drugName = drug.getKey();
+                Drug drugObj = drug.getValue();
+
+                if(drugObj.getStatus().equals("Formulary") && !drugName.equals("")){
+                    formularyList.put(UUID.randomUUID().toString(), drugObj);
+//                    formularyList.put(drugName, drugObj);
+                }
+                if(drugObj.getStatus().equals("Excluded") && !drugName.equals("")){
+                    excludedList.put(UUID.randomUUID().toString(), drugObj);
+//                    excludedList.put(drugName, drugObj);
+                }
+                if(drugObj.getStatus().equals("Restricted") && !drugName.equals("")){
+                    restrictedList.put(UUID.randomUUID().toString(), drugObj);
+//                    restrictedList.put(drugName, drugObj);
+                }
+            }
+
+            for(Map.Entry<String, Drug> drug :masterList.getListByBrand().getBrandDrugList().entrySet()){
+                String drugName = drug.getKey();
+                Drug drugObj = drug.getValue();
+
+                if(drugObj.getStatus().equals("Formulary") && !drugName.equals("")){
+                    formularyList.put(UUID.randomUUID().toString(), drugObj);
+//                    formularyList.put(drugName, drugObj);
+                }
+                if(drugObj.getStatus().equals("Excluded") && !drugName.equals("")){
+                    excludedList.put(UUID.randomUUID().toString(), drugObj);
+//                    excludedList.put(drugName, drugObj);
+                }
+                if(drugObj.getStatus().equals("Restricted") && !drugName.equals("")){
+                    restrictedList.put(UUID.randomUUID().toString(), drugObj);
+//                    restrictedList.put(drugName, drugObj);
+                }
+            }
+
+            Log.d("Formulary", "Count: " + formularyList.size());
+            Log.d("Excluded", "Count: " + excludedList.size());
+            Log.d("Restricted", "Count: " + restrictedList.size());
+
+            Firebase firebase = new Firebase(Utilities.firebaseRoot);
+            firebase.child("Formulary").setValue(formularyList);
+            firebase.child("Excluded").setValue(excludedList);
+            firebase.child("Restricted").setValue(restrictedList);
+            firebase.child("Update").setValue(new Date());
+        }
+        catch (IOException e){
+            Log.d("Formulary parse error", e.getMessage());
+        }
+
+    }
 
 }
