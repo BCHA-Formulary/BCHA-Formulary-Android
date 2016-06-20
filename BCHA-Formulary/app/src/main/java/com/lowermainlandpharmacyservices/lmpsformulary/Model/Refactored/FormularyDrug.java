@@ -27,6 +27,18 @@ public class FormularyDrug extends DrugBase{
         this.strengths = strengths;
     }
 
+    //Constructor - altName list and one strength are provided
+    public FormularyDrug(String primaryName, NameType nameType,
+                         List<String> alternateName, String strengths, Status status, String drugClass){
+        super(drugClass, status);
+
+        this.primaryName = primaryName;
+        this.nameType = nameType;
+        this.alternateName = alternateName;
+        this.strengths = new ArrayList<String>();
+        this.strengths.add(strengths);
+    }
+
     //Constructor - only one alt name and one strength are provided
     public FormularyDrug(String primaryName, NameType nameType,
                          String alternateName, String strengths, Status status, String drugClass){

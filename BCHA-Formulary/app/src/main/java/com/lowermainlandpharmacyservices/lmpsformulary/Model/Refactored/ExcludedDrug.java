@@ -14,6 +14,9 @@ public class ExcludedDrug extends DrugBase {
     public List<String> alternateName;
     public String criteria;
 
+    //default constructor
+    public ExcludedDrug(){}
+
     //Constructor - altName list
     public ExcludedDrug(String primaryName, NameType nameType,
                         List<String> alternateName, String criteria, Status status, String drugClass){
@@ -54,12 +57,20 @@ public class ExcludedDrug extends DrugBase {
         this.primaryName = primaryName;
     }
 
-    public NameType getNameType() {
+    @Exclude //exclude from firebase
+    public NameType getNameTypeVal() {
         return nameType;
     }
 
-    public void setNameType(NameType nameType) {
+    public String getNameType(){ return nameType.name();}
+
+    @Exclude
+    public void setNameTypeVal(NameType nameType) {
         this.nameType = nameType;
+    }
+
+    public void setNameType(String nameType) {
+        this.nameType = NameType.valueOf(nameType);
     }
 
     public List<String> getAlternateName() {
