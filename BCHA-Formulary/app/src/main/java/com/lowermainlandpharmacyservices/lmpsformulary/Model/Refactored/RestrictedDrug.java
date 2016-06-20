@@ -1,5 +1,7 @@
 package com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class RestrictedDrug extends DrugBase {
 
     //Constructor - altName list
     public RestrictedDrug(String primaryName, NameType nameType,
-                        List<String> alternateName, String criteria, String status, DrugType drugType, List<String> drugClass){
+                          List<String> alternateName, String criteria, String status, Status drugType, List<String> drugClass){
         super(drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
@@ -24,7 +26,7 @@ public class RestrictedDrug extends DrugBase {
 
     //Constructor - only one alt name provided
     public RestrictedDrug(String primaryName, NameType nameType,
-                        String alternateName, String criteria, String status, DrugType drugType, List<String> drugClass){
+                          String alternateName, String criteria, String status, Status drugType, List<String> drugClass){
         super(drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
@@ -35,7 +37,7 @@ public class RestrictedDrug extends DrugBase {
 
     //Constructor - no alt name and no strength provided
     public RestrictedDrug(String primaryName, NameType nameType, String criteria,
-                        String status, DrugType drugType, List<String> drugClass){
+                          String status, Status drugType, List<String> drugClass){
         super(drugClass, drugType);
         this.primaryName = primaryName;
         this.nameType = nameType;
@@ -74,5 +76,30 @@ public class RestrictedDrug extends DrugBase {
 
     public void setCriteria(String criteria) {
         this.criteria = criteria;
+    }
+
+    //getters and setters from base class so firebase can get/set properties
+    public List<String> getDrugClass() {
+        return drugClass;
+    }
+
+    public void setDrugClass(List<String> drugClass) {
+        this.drugClass = drugClass;
+    }
+
+    @Exclude //exclude type for firebase
+    public Status getStatusVal() {
+        return status;
+    }
+
+    public String getStatus() { return status.name();}
+
+    @Exclude
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setStatus(String status) {
+        this.status = Status.valueOf(status);
     }
 }
