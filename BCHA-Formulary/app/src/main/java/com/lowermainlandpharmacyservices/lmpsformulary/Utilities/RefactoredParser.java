@@ -231,6 +231,106 @@ public class RefactoredParser {
         }
     }
 
+    /**
+     * Parse excluded will only be used for the generic, brand, class and first line of reason
+     * the rest will be manually added in for simplicity
+     * @param csvFile
+     */
+    public void parseRestricted(InputStream csvFile){
+        // public void parseFormulary(BufferedReader dataFile){
+        BufferedReader dataFile = new BufferedReader(new InputStreamReader(
+                csvFile));
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(dataFile);
+            String[] nextLine;
+            reader.readNext(); // title line
+            while ((nextLine = reader.readNext()) != null) {
+                String name = nextLine[0].toUpperCase().trim();
+                String altName = nextLine[1].toUpperCase().trim();
+                String criteria = nextLine[2].toUpperCase().trim();
+                String drugClass = nextLine[3].toUpperCase().trim();
+
+                //generic list--------------
+                if (!(name.equals(""))) { // handles all the empty lines
+                    if (restrictedList.containsKey(name)) { //check if drug already exists
+                        RestrictedDrug drug = restrictedList.get(name);
+
+                        //checks alt names. if new, add to the list
+                        String[] altNameList = getSeparateAltNames(altName);
+                        if(altNameList != null) {
+                            for (String altNameEntry : altNameList) {
+                                if (!altName.equals("") && !drug.getAlternateName().contains(altNameEntry)) {
+                                    drug.getAlternateName().add(altNameEntry);
+                                }
+                            }
+                        }
+
+                        //parse drug class (if multiple) and check if classes are in list, add if not
+                        String[] drugClasses = getSeparateDrugClasses(drugClass);  //TODO declare local var
+                        if(drugClasses != null) {
+                            for (String drugClassName : drugClasses) {
+                                if (!drug.getDrugClass().contains(drugClassName)) {
+                                    drug.getDrugClass().add(drugClassName);
+                                }
+                            }
+                        }
+                    } else { //generic drug is new
+                        String[] drugClasses = getSeparateDrugClasses(drugClass); //TODO null check
+                        String[] altNameList = getSeparateAltNames(altName);
+                        for (String drugClassName : drugClasses) {
+                            if(altNameList != null) {
+                                restrictedList.put(name, new RestrictedDrug(name, NameType.GENERIC,
+                                        new ArrayList<String>(Arrays.asList(altNameList)), criteria,
+                                        Status.RESTRICTED, drugClassName));
+                            }
+                            else {
+                                restrictedList.put(name, new RestrictedDrug(name, NameType.GENERIC,
+                                        altName, criteria,
+                                        Status.RESTRICTED, drugClassName));
+                            }
+                            Log.d("Restricted parse", altName);
+                        }
+                    }
+                }
+                //Brand list--------------
+                if (!altName.equals("")) {
+                    String[] altNameList = getSeparateAltNames(altName);
+                    for (String altNameEntry : altNameList) {
+                        if (restrictedList.containsKey(altNameEntry)) { //check if drug already exists
+                            RestrictedDrug drug = restrictedList.get(altNameEntry);
+
+                            //brand name drugs only have 1 generic name so no check is needed
+
+                            //parse drug names (if multiple) and check if names are in list, add if not
+                            String[] drugClasses = getSeparateDrugClasses(drugClass); //TODO declare local var
+                            if(drugClasses != null) {
+                                for (String drugClassName : drugClasses) {
+                                    if (!drug.getDrugClass().contains(drugClassName)) {
+                                        drug.getDrugClass().add(drugClassName);
+                                    }
+                                }
+                            }
+                        } else { //brand drug is new
+                            String[] drugClasses = getSeparateDrugClasses(drugClass); //TODO null check
+                            for (String drugClassName : drugClasses) {
+                                restrictedList.put(altName, new RestrictedDrug(altNameEntry, NameType.BRAND,
+                                        name, criteria, Status.RESTRICTED, drugClassName));
+                                Log.d("Restricted parse", altName);
+                            }
+                        }
+                    }
+                }
+            }
+            dataFile.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            dataFile = null;
+        }
+    }
+
     private String[] getSeparateAltNames(String altNames) {
         String[] altNameList = new String[1];
         if (altNames != null) {

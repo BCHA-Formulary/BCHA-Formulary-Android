@@ -35,6 +35,26 @@ public class RestrictedDrug extends DrugBase {
         this.criteria = criteria;
     }
 
+
+    public RestrictedDrug(String primaryName, NameType nameType, List<String> alternateName, String criteria,
+                          Status drugType, String drugClass){
+        super(drugClass, drugType);
+        this.primaryName = primaryName;
+        this.nameType = nameType;
+        this.alternateName = alternateName;
+        this.criteria = criteria;
+    }
+
+    public RestrictedDrug(String primaryName, NameType nameType, String alternateName, String criteria,
+                          Status drugType, String drugClass){
+        super(drugClass, drugType);
+        this.primaryName = primaryName;
+        this.nameType = nameType;
+        this.alternateName = new ArrayList<String>();
+        this.alternateName.add(alternateName);
+        this.criteria = criteria;
+    }
+
     //Constructor - no alt name and no strength provided
     public RestrictedDrug(String primaryName, NameType nameType, String criteria,
                           String status, Status drugType, List<String> drugClass){
@@ -54,12 +74,20 @@ public class RestrictedDrug extends DrugBase {
         this.primaryName = primaryName;
     }
 
-    public NameType getNameType() {
+    @Exclude //exclude from firebase
+    public NameType getNameTypeVal() {
         return nameType;
     }
 
-    public void setNameType(NameType nameType) {
+    public String getNameType(){ return nameType.name();}
+
+    @Exclude
+    public void setNameTypeVal(NameType nameType) {
         this.nameType = nameType;
+    }
+
+    public void setNameType(String nameType) {
+        this.nameType = NameType.valueOf(nameType);
     }
 
     public List<String> getAlternateName() {
