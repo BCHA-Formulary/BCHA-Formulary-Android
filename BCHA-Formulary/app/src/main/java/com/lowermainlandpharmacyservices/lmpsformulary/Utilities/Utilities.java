@@ -1,5 +1,9 @@
 package com.lowermainlandpharmacyservices.lmpsformulary.Utilities;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 public final class Utilities {
 
 	// Password SECTION
@@ -17,4 +21,13 @@ public final class Utilities {
 
 	//Firebase
 	public static final String firebaseRoot = "https://bcha-formulary.firebaseio.com/";
+
+	//network connection
+	public static boolean isConnectedInternet(Context context){
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
+
+
 }

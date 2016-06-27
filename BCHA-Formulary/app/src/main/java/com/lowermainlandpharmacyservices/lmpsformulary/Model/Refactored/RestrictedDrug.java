@@ -14,6 +14,7 @@ public class RestrictedDrug extends DrugBase {
     public List<String> alternateName;
     public String criteria;
 
+    public RestrictedDrug(){}
     //Constructor - altName list
     public RestrictedDrug(String primaryName, NameType nameType,
                           List<String> alternateName, String criteria, String status, Status drugType, List<String> drugClass){
