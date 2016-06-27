@@ -72,15 +72,16 @@ public class SplashScreenActivity extends Activity {
 		//TODO start progress bar here
         if(Utilities.isConnectedInternet(this)) {
             DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
+
             ValueEventListener updateEvent = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String timeVal = dataSnapshot.getValue().toString();
-                    Long time = Long.parseLong(timeVal.trim());
+                    String firebaseTime = dataSnapshot.getValue().toString().trim();
+                    Long time = Long.parseLong(firebaseTime);
                     Date lastUpdate = new Date(time);
                     Date lastDeviceUpdate = SplashScreenActivity.this.getCurrentFileVersion();
                     if(lastUpdate.equals(lastDeviceUpdate))
-                        performUpdate();
+                        performUpdate(firebaseTime);
                 }
 
                 @Override
@@ -106,54 +107,12 @@ public class SplashScreenActivity extends Activity {
         return new Date(Long.parseLong(lastDeviceUpdate));
 	}
 
-//	private String getLatestFileVersion() {
-//
-//		FileInputStream fis = null;
-//		String newVersion;
-//		BufferedReader reader;
-//		String line;
-//
-//		DownloadTask fileVersion = new DownloadTask(SplashScreenActivity.this,
-//				"fileVersion.txt");
-//
-//		try {
-//
-//			fileVersion
-//					.execute(
-//							"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AAD2BXYQ0oB-i1RLnCYAnA7na/update.txt?dl=1").get();
-//
-//			fis = openFileInput("fileVersion.txt");
-//			reader = new BufferedReader(new InputStreamReader(fis));
-//			line = reader.readLine();
-//			newVersion = line;
-//
-//		} catch (Exception e) {
-//			newVersion = "-3";
-//		} finally {
-//			try {
-//				if (fis != null)
-//					fis.close();
-//			} catch (IOException ex) {
-//				ex.printStackTrace();
-//			}
-//		}
-//
-//		return newVersion;
-//	}
-
-
-	private void performUpdate() {
+	private void performUpdate(String updateVersion) {
 
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		boolean isConnected = activeNetwork != null
 				&& activeNetwork.isConnectedOrConnecting();
-
-
-//		System.out.println("We need an update!");
-//		Toast.makeText(this, "File update in progress",
-//				Toast.LENGTH_LONG).show();
-
 
 		// if network is on
 		if (isConnected) {
@@ -250,40 +209,11 @@ public class SplashScreenActivity extends Activity {
 
                 }
             });
-
             //TODO remove child listeners on view hiding
-
-
-// The old method of grabbing dropbox
-//			try{
-//				final DownloadTask downloadFormulary = new DownloadTask(
-//						SplashScreenActivity.this, "formularyUpdated.csv");
-//				downloadFormulary
-//						.execute(
-//								"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AABotiW6CP_-JrGAh0mw1nkma/formulary.csv?dl=1").get();
-//				final DownloadTask downloadExcluded = new DownloadTask(
-//						SplashScreenActivity.this, "excludedUpdated.csv");
-//				downloadExcluded
-//						.execute(
-//								"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AAAh2jkw2watr9KpopeH_JUsa/excluded.csv?dl=1").get();
-//				final DownloadTask downloadRestricted = new DownloadTask(
-//						SplashScreenActivity.this, "restrictedUpdated.csv");
-//				downloadRestricted
-//						.execute(
-//								"https://www.dropbox.com/sh/ctdjnxoemlx9hbr/AACa_xqMx2PZWMoWKe5tJoRda/restricted.csv?dl=1").get();
-//
-//				// We need an Editor object to make preference changes.
-//				// All objects are from android.context.Context
-//
-//				editor.putBoolean("filesDownloaded", true);
-//				editor.commit();
-//				Toast.makeText(this, "Update completed", Toast.LENGTH_LONG)
-//						.show();
-//			}
-//			catch(Exception e)
-//			{
-//
-//			}
+            //TODO make sql tables
+            //TODO refactor all keys to string utils file
+            editor.putString("LAST_UPDATE", updateVersion);
+            editor.commit();
 		} else { // if network is off
 			Toast.makeText(
 					this,
