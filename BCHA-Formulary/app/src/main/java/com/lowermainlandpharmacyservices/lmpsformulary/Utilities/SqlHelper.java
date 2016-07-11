@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.SqlModels.SqlDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.SqlModels.SqlFormulary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,13 @@ public class SqlHelper extends SQLiteOpenHelper{
     private static final String KEY_STATUS = "status";
     private static final String KEY_CLASS = "class";
 
+    //Formulary Table columns
+    private static final String KEY_PRIMARY_UID = "uid";
+    private static final String KEY_GENERIC_NAME = "generic_name";
+    private static final String KEY_BRAND_NAME = "brand_name";
+    private static final String KEY_STRENGTH = "strength";
+
+
     public SqlHelper (Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -52,12 +60,20 @@ public class SqlHelper extends SQLiteOpenHelper{
                 + KEY_STATUS + " TEXT,"
                 + KEY_CLASS + " TEXT" + ")";
         db.execSQL(CREATE_DRUGS_TABLE);
+
+        String CREATE_FORUMARLY_TABLE = "CREATE TABLE " + TABLE_FORMULARY + " ("
+                + KEY_PRIMARY_UID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_GENERIC_NAME + " TEXT,"
+                + KEY_BRAND_NAME + "TEXT,"
+                + KEY_STRENGTH + "TEXT" + ")";
+        db.execSQL(CREATE_FORUMARLY_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //drop old table if exist
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DRUG);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FORMULARY);
 
         //create new table
         this.onCreate(db);
@@ -79,6 +95,28 @@ public class SqlHelper extends SQLiteOpenHelper{
         db.close();
     }
 
+    /**
+     * Inserts a single SqlFormulary drug into the table
+     * This method does NOT add the drug into the drug table and will
+     * need to be manually added
+     *
+     * Primary Key "uid" is auto-generated and does not need to be included into values
+     * @param formulary
+     */
+    public void addFormulary(SqlFormulary formulary){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //put row values in
+        ContentValues values = new ContentValues();
+        values.put(KEY_GENERIC_NAME, formulary.getGenericName());
+        values.put(KEY_BRAND_NAME, formulary.getBrandName());
+        values.put(KEY_STRENGTH, formulary.getStrength());
+
+        //write to table
+        db.insert(TABLE_FORMULARY, null, values);
+        db.close();
+    }
+
     //read single drug row
     public SqlDrug getDrug(String name){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -91,6 +129,32 @@ public class SqlHelper extends SQLiteOpenHelper{
         SqlDrug drug = new SqlDrug(cursor.getString(0), cursor.getString(1),
                                     cursor.getString(2), cursor.getString(3));
         return drug;
+    }
+
+    /**
+     * From the formulary table, find all drugs with a certain generic or brand name
+     * @param name - Name of the drug to find
+     * @param isGenericName - true if the name is generic, false if it is a brand
+     * @return
+     */
+    public List<SqlFormulary> getFormularyDrugs(String name, boolean isGenericName){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<SqlFormulary> forumaryList = new ArrayList<SqlFormulary>();
+
+        //Build query based on name
+        String key_column = isGenericName ? KEY_GENERIC_NAME : KEY_BRAND_NAME;
+        String query = "SELECT * FROM " + TABLE_FORMULARY + " WHERE " + key_column +" = " + name.trim();
+        Cursor c = db.rawQuery(query, null);
+
+        //Add all query results to list
+        if(c.moveToFirst()){
+            do{
+                SqlFormulary formularyDrug = new SqlFormulary(c.getString(1), c.getString(2), c.getString(3));
+                forumaryList.add(formularyDrug);
+            } while (c.moveToNext());
+        }
+
+        return forumaryList;
     }
 
     //get all drugs
@@ -136,6 +200,18 @@ public class SqlHelper extends SQLiteOpenHelper{
         return db.update(TABLE_DRUG, values, KEY_PRIMARY_NAME + " =?",
                 new String[]{drug.getPrimaryName()});
     }
+
+//    public int updateFormulary(SqlFormulary formulary){
+//        SQLiteDatabase db = getWritableDatabase();
+//
+//        //put row values in
+//        ContentValues values = new ContentValues();
+//        values.put(KEY_GENERIC_NAME, formulary.getGenericName());
+//        values.put(KEY_BRAND_NAME, formulary.getBrandName());
+//        values.put(KEY_STRENGTH, formulary.getStrength());
+//
+//        return db.update(TABLE_FORMULARY, values, )
+//    }
 
     public void deleteDrug(SqlDrug drug){
         SQLiteDatabase db = getWritableDatabase();
