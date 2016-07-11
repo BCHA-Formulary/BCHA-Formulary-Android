@@ -113,6 +113,16 @@ public class SqlHelper extends SQLiteOpenHelper{
         return drugList;
     }
 
+    //get drug count
+    public int getDrugCount(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectAllQuery = "SELECT * FROM " + TABLE_DRUG;
+        Cursor cursor = db.rawQuery(selectAllQuery, null);
+        cursor.close();
+
+        return cursor.getCount();
+    }
+
     public int updateDrug(SqlDrug drug){
         SQLiteDatabase db = getWritableDatabase();
 
@@ -132,6 +142,4 @@ public class SqlHelper extends SQLiteOpenHelper{
         db.delete(TABLE_DRUG, KEY_PRIMARY_NAME + " = ?", new String[]{KEY_PRIMARY_NAME});
         db.close();
     }
-
-
 }
