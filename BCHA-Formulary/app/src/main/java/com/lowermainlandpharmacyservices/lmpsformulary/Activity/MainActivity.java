@@ -23,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandDrugList;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandExcludedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandFormularyDrug;
@@ -33,7 +34,7 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericExcludedDrug
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericFormularyDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericRestrictedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.ExcludedDrug;
-import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.RestrictedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.FormularyDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.R;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.CSVparser;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.RefactoredParser;
@@ -43,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -331,34 +333,34 @@ public class MainActivity extends Activity {
         RefactoredParser masterList = new RefactoredParser();
         try {
 			//formulary===============================================================================
-//			InputStream file = getAssets().open("formulary class 31Mar2016.csv");
+			InputStream file = getAssets().open("formulary class 31Mar2016.csv");
 
-//            masterList.parseFormulary(file);
-//			System.out.println("Forumarly drug count: " + masterList.getFormularyList().size());
-//
-//			DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
-//			ArrayList<FormularyDrug> formularyList = new ArrayList<FormularyDrug>(masterList.getFormularyList().values());
-//			int multiplier = 1;
-//			for(int i = 0; i < formularyList.size(); i++){
-//				FormularyDrug drug = formularyList.get(i);
-//
-//				// only 75 items could be added to firebase using setValue alone
-//				// HACK - pause adding drugs to firebase every 50 items to allow for mass adding
-//				if(i * multiplier % 50 == 0){
-//					try {
-//						Thread.sleep(1000);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//				try {
-//					firebase.child("Formulary").child(String.valueOf(i)).setValue(drug);
-//				}
-//				catch (Exception e){
-//						System.out.println(drug.primaryName + " was not added.");
-//						System.out.println(e.getMessage());
-//				}
-//			}
+            masterList.parseFormulary(file);
+			System.out.println("Forumarly drug count: " + masterList.getFormularyList().size());
+
+			DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
+			ArrayList<FormularyDrug> formularyList = new ArrayList<FormularyDrug>(masterList.getFormularyList().values());
+			int multiplier = 1;
+			for(int i = 0; i < formularyList.size(); i++){
+				FormularyDrug drug = formularyList.get(i);
+
+				// only 75 items could be added to firebase using setValue alone
+				// HACK - pause adding drugs to firebase every 50 items to allow for mass adding
+				if(i * multiplier % 50 == 0){
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				try {
+					firebase.child("Formulary").child(String.valueOf(i)).setValue(drug);
+				}
+				catch (Exception e){
+						System.out.println(drug.primaryName + " was not added.");
+						System.out.println(e.getMessage());
+				}
+			}
 			//excluded===============================================================================
 //			InputStream file = getAssets().open("excluded class 31Mar2016.csv");
 //			masterList.parseExcluded(file);
@@ -387,44 +389,125 @@ public class MainActivity extends Activity {
 //						System.out.println(e.getMessage());
 //				}
 //			}
-//        }
-//        catch (IOException e){
-//            Log.d("Formulary parse error", e.getMessage());
-//        }
+        }
+        catch (IOException e){
+            Log.d("Formulary parse error", e.getMessage());
+        }
 			//restricted============================================================================
-			InputStream file = getAssets().open("restricted class 31Mar2016.csv");
-			masterList.parseRestricted(file);
-			System.out.println("Restricted drug count: " + masterList.getRestrictedList().size());
+//			InputStream file = getAssets().open("restricted class 31Mar2016.csv");
+//			masterList.parseRestricted(file);
+//			System.out.println("Restricted drug count: " + masterList.getRestrictedList().size());
+//
+//			DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
+//			ArrayList<RestrictedDrug> restrictedList = new ArrayList<RestrictedDrug>(masterList.getRestrictedList().values());
+//			int multiplier = 1;
+//			for(int i = 0; i < restrictedList.size(); i++){
+//				RestrictedDrug drug = restrictedList.get(i);
+//
+//				// only 75 items could be added to firebase using setValue alone
+//				// HACK - pause adding drugs to firebase every 50 items to allow for mass adding
+//				if(i * multiplier % 50 == 0){
+//					try {
+//						Thread.sleep(1000);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//				try {
+//					firebase.child("Restricted").child(String.valueOf(i)).setValue(drug);
+//				}
+//				catch (Exception e){
+//					System.out.println(drug.primaryName + " was not added.");
+//					System.out.println(e.getMessage());
+//				}
+//			}
+//		}
+//		catch (IOException e){
+//			Log.d("Formulary parse error", e.getMessage());
+//		}
+//
+//		SqlHelper db = new SqlHelper(this);
+////		db.addDrug(new SqlDrug("Tylenol", NameType.GENERIC.toString(), Status.FORMULARY.toString(), "Pain"));
+////		db.addDrug(new SqlDrug("Advil",NameType.BRAND.toString(), Status.EXCLUDED.toString(), "Anti Coag"));
+////		db.addDrug(new SqlDrug("Fentinal", NameType.GENERIC.toString(), Status.FORMULARY.toString(), "Pain"));
+//		List<SqlDrug> drugList = db.getAllDrugs();
+//        for (SqlDrug drug : drugList) {
+//            Log.d("Drug", drug.getPrimaryName());
+//        }
 
-			DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
-			ArrayList<RestrictedDrug> restrictedList = new ArrayList<RestrictedDrug>(masterList.getRestrictedList().values());
-			int multiplier = 1;
-			for(int i = 0; i < restrictedList.size(); i++){
-				RestrictedDrug drug = restrictedList.get(i);
 
-				// only 75 items could be added to firebase using setValue alone
-				// HACK - pause adding drugs to firebase every 50 items to allow for mass adding
-				if(i * multiplier % 50 == 0){
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+
+		final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+		final List<ExcludedDrug> excludedDrugs = new ArrayList<ExcludedDrug>();
+		ref.child("Excluded").addChildEventListener(new ChildEventListener() {
+			@Override
+			public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+				ExcludedDrug drug = dataSnapshot.getValue(ExcludedDrug.class);
+				if(drug != null){
+					excludedDrugs.add(drug);
 				}
-				try {
-					firebase.child("Restricted").child(String.valueOf(i)).setValue(drug);
-				}
-				catch (Exception e){
-					System.out.println(drug.primaryName + " was not added.");
-					System.out.println(e.getMessage());
+
+				if(excludedDrugs.size() == 56){
+					Gson gson = new Gson();
+					String excludedString =  gson.toJson(excludedDrugs);
+					ref.child("ExcludedString").setValue(excludedString);
 				}
 			}
-		}
-		catch (IOException e){
-			Log.d("Formulary parse error", e.getMessage());
-		}
+
+			@Override
+			public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+			}
+
+			@Override
+			public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+			}
+
+			@Override
+			public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+			}
+
+			@Override
+			public void onCancelled(DatabaseError databaseError) {
+
+			}
+		});
 
 
+
+
+//		ref.child("FormularyString").addListenerForSingleValueEvent(new ValueEventListener() {
+//			@Override
+//			public void onDataChange(DataSnapshot dataSnapshot) {
+//				Gson gson = new Gson();
+//				Type collectionType = new TypeToken<List<FormularyDrug>>(){}.getType();
+//				List<FormularyDrug> drugs = gson.fromJson(dataSnapshot.getValue().toString(), collectionType);
+//				Log.d("Main", drugs.size() + "");
+//			}
+//
+//			@Override
+//			public void onCancelled(DatabaseError databaseError) {
+//
+//			}
+//		});
+
+//		ref.child("ExcludedString").addListenerForSingleValueEvent(new ValueEventListener() {
+//			@Override
+//			public void onDataChange(DataSnapshot dataSnapshot) {
+//				Gson gson = new Gson();
+//				Type collectionType = new TypeToken<List<ExcludedDrug>>(){}.getType();
+//				List<ExcludedDrug> drugs = gson.fromJson(dataSnapshot.getValue().toString(), collectionType);
+//				Log.d("Main", drugs.size() + "");
+//			}
+//
+//			@Override
+//			public void onCancelled(DatabaseError databaseError) {
+//
+//			}
+//		});
     }
 
 }

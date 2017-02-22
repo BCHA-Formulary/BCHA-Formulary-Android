@@ -28,5 +28,8 @@ dependencies {
     compile 'com.android.support:support-v4:19.1.0'
     compile files('libs/opencsv-3.1.jar')
     compile 'com.google.firebase:firebase-database:9.0.2'
+
+    //gson JSON parser
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
 }
 apply plugin: 'com.google.gms.google-services'

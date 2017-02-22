@@ -77,8 +77,9 @@ public class SplashScreenActivity extends Activity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String firebaseTime = dataSnapshot.getValue().toString().trim();
-                    Long time = Long.parseLong(firebaseTime);
-                    Date lastUpdate = new Date(time);
+//                    Long time = Long.parseLong(firebaseTime);
+//                    Date lastUpdate = new Date(time);
+                    Date lastUpdate = new Date();
                     Date lastDeviceUpdate = SplashScreenActivity.this.getCurrentFileVersion();
                     if(lastUpdate.equals(lastDeviceUpdate))
                         performUpdate(firebaseTime);
@@ -221,7 +222,6 @@ public class SplashScreenActivity extends Activity {
 							+ "and restart to app to update",
 					Toast.LENGTH_LONG).show();
 		}
-
 	}
 
 }
