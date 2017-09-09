@@ -23,7 +23,6 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericDrugList;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.ExcludedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.FormularyDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.RestrictedDrug;
-import com.lowermainlandpharmacyservices.lmpsformulary.R;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.CSVparser;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
 
@@ -48,8 +47,8 @@ public class SplashScreenActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_splash_screen);
-		getActionBar().hide();
+//		setContentView(R.layout.activity_splash_screen);
+//		getActionBar().hide();
 
 		settings = getApplicationContext().getSharedPreferences("foo", 0);
 
