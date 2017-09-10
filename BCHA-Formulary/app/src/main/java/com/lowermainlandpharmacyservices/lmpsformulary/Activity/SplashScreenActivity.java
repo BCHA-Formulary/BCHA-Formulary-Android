@@ -24,6 +24,7 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.Excluded
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.FormularyDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.RestrictedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.CSVparser;
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.SharedPrefManager;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 public class SplashScreenActivity extends Activity {
+    private static final String TAG = SplashScreenActivity.class.getSimpleName();
 
 	SharedPreferences settings;
 	SharedPreferences.Editor editor;
@@ -50,11 +52,15 @@ public class SplashScreenActivity extends Activity {
 //		setContentView(R.layout.activity_splash_screen);
 //		getActionBar().hide();
 
-		settings = getApplicationContext().getSharedPreferences("foo", 0);
+//		settings = getApplicationContext().getSharedPreferences("foo", 0);
 
 		//Check internet status
-        if(!Utilities.isConnectedInternet(getApplicationContext()))
+        if(!Utilities.isConnectedInternet(getApplicationContext())) {
+            //TODO make dialog message
             Toast.makeText(this, "Internet connection is required for most up to date formulary information", Toast.LENGTH_LONG).show();
+        } else {
+
+        }
 
 		//pause to see the pretty splash screen
 		new Handler().postDelayed(new Runnable() {
@@ -67,20 +73,43 @@ public class SplashScreenActivity extends Activity {
 	}
 
 	private void initializeApp(){
-		assetManager = getAssets();
-		//TODO start progress bar here
+//        String lastUpdated;
+////		assetManager = getAssets();
+//		//TODO start progress bar here
+//        try {
+//            SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance();
+//            lastUpdated = sharedPrefManager.getString(SharedPrefManager.Key.LAST_UPDATED, "");
+//        } catch (Exception e) {
+//            Log.d(TAG, "Could not get last update from pref");
+//            lastUpdated = "";
+//        }
         if(Utilities.isConnectedInternet(this)) {
             DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
 
             ValueEventListener updateEvent = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String firebaseTime = dataSnapshot.getValue().toString().trim();
-                    Long time = Long.parseLong(firebaseTime);
-                    Date lastUpdate = new Date(time);
-                    Date lastDeviceUpdate = SplashScreenActivity.this.getCurrentFileVersion();
-                    if(lastUpdate.equals(lastDeviceUpdate))
-                        performUpdate(firebaseTime);
+                    String firebaseTime = dataSnapshot.getValue().toString();
+                    String lastUpdated;
+                    try {
+                        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance();
+                        lastUpdated = sharedPrefManager.getString(SharedPrefManager.Key.LAST_UPDATED, "");
+                    } catch (Exception e) {
+                        Log.d(TAG, "Could not get last update from pref");
+                        lastUpdated = "";
+                    }
+//                    if (lastUpdated.isEmpty() || !lastUpdated.equals(firebaseTime)){
+//                        performUpdate(firebaseTime);
+//                    } else {
+                        //firebase is up to date
+                        Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
+                        startActivity(searchActivity);
+//                    }
+//                    Long time = Long.parseLong(firebaseTime);
+//                    Date lastUpdate = new Date(time);
+//                    Date lastDeviceUpdate = SplashScreenActivity.this.getCurrentFileVersion();
+//                    if(lastUpdate.equals(lastDeviceUpdate))
+
                 }
 
                 @Override
@@ -89,15 +118,17 @@ public class SplashScreenActivity extends Activity {
                 }
             };
             firebase.child("Update").addListenerForSingleValueEvent(updateEvent);
+        } else {
+
         }
 
-
-		//TODO stop progress bar here
-		System.out.println("Initializing app in splash screen");
-
-		Intent searchActivity = new Intent(this, MainActivity.class);
-		startActivity(searchActivity);
-		System.out.println("startedmainactivity");
+//
+//		//TODO stop progress bar here
+//		System.out.println("Initializing app in splash screen");
+//
+//		Intent searchActivity = new Intent(this, MainActivity.class);
+//		startActivity(searchActivity);
+//		System.out.println("startedmainactivity");
 
 	}
 
