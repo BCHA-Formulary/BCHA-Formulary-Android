@@ -28,5 +28,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.0'
     compile files('libs/opencsv-3.1.jar')
     compile 'com.google.firebase:firebase-database:11.2.2'
+    compile 'com.google.code.gson:gson:2.8.0'
 }
 apply plugin: 'com.google.gms.google-services'

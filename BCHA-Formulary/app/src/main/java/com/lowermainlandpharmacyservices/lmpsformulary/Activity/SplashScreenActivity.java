@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.lowermainlandpharmacyservices.lmpsformulary.GenericCallback;
-import com.lowermainlandpharmacyservices.lmpsformulary.Model.Drug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.DrugBase;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.ExcludedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.FormularyDrug;
@@ -23,6 +21,7 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.NameType
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.RestrictedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.Status;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.SharedPrefManager;
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.SqlHelper;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
 
 import java.util.ArrayList;
@@ -40,10 +39,10 @@ public class SplashScreenActivity extends Activity {
 //	GenericDrugList genericList;
 //	BrandDrugList brandList;
 
-	int PAUSE_MILLISECONDS = 500;
-
-    int updatedListsFetched = 0;
-    List<Drug> updatedDrugList;
+//	int PAUSE_MILLISECONDS = 500;
+//
+//    int updatedListsFetched = 0;
+//    List<Drug> updatedDrugList;
 
     ChildEventListener formularyListener;
     ChildEventListener excludedListener;
@@ -69,13 +68,13 @@ public class SplashScreenActivity extends Activity {
         }
 
 		//pause to see the pretty splash screen
-		new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+//		new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
                 initializeApp();
-                finish();
-            }
-        }, PAUSE_MILLISECONDS);
+//                finish();
+//            }
+//        }, PAUSE_MILLISECONDS);
 	}
 
 	private void initializeApp(){
@@ -109,6 +108,11 @@ public class SplashScreenActivity extends Activity {
                             @Override
                             public void onSuccess(List<DrugBase> drugList) {
                                 Log.d(TAG, "Drug count: " + drugList.size());
+                                SqlHelper sqlHelper = new SqlHelper(SplashScreenActivity.this);
+                                sqlHelper.clearAllTables();
+                                sqlHelper.addAllDrug(drugList);
+                                Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
+                                startActivity(searchActivity);
                             }
 
                             @Override
@@ -117,11 +121,11 @@ public class SplashScreenActivity extends Activity {
                             }
                         });
                     }
-//                    else {
+                    else {
                         //firebase is up to date
                         Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
                         startActivity(searchActivity);
-//                    }
+                    }
 //                    Long time = Long.parseLong(firebaseTime);
 //                    Date lastUpdate = new Date(time);
 //                    Date lastDeviceUpdate = SplashScreenActivity.this.getCurrentFileVersion();
