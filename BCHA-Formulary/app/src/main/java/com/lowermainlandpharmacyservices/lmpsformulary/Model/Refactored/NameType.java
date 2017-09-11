@@ -5,5 +5,13 @@ package com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored;
  */
 public enum NameType {
     GENERIC,
-    BRAND
+    BRAND;
+
+    public static NameType getNameType(String nametype) {
+        if (nametype.equals(GENERIC.name()))
+            return GENERIC;
+        return BRAND;
+    }
 }
+
+

@@ -2,24 +2,24 @@ package com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored;
 
 import com.google.firebase.database.Exclude;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Kelvin on 6/5/2016.
  */
 public class DrugBase {
+    public String primaryName;
+    public NameType nameType;
+    public List<String> alternateNames;
     public List<String> drugClass;
     public Status status;
 
     public DrugBase(){}
-    public DrugBase(String drugClass, Status status){
-        this.drugClass = new ArrayList<String>();
-        this.drugClass.add(drugClass);
-        this.status = status;
-    }
 
-    public DrugBase(List<String> drugClass, Status status){
+    public DrugBase(String primaryName, NameType nameType, List<String> alternateNames, List<String> drugClass, Status status) {
+        this.primaryName = primaryName;
+        this.nameType = nameType;
+        this.alternateNames = alternateNames;
         this.drugClass = drugClass;
         this.status = status;
     }
