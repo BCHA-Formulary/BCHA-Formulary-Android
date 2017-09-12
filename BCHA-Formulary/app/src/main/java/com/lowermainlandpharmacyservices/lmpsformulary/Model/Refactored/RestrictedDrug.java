@@ -14,4 +14,9 @@ public class RestrictedDrug extends DrugBase {
         super(primaryName, nameType, alternateNames, drugClass, status);
         this.criteria = criteria;
     }
+
+    public RestrictedDrug(String criteria, DrugBase drugBase) {
+        super(drugBase);
+        this.criteria = criteria;
+    }
 }

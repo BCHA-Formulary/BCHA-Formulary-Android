@@ -368,6 +368,14 @@ public class SqlHelper extends SQLiteOpenHelper{
                 List<String> drugClasses = gson.fromJson(cursor.getString(3), type);
 
                 DrugBase drugBase = new DrugBase(primaryName, nameType, altNames, drugClasses, status);
+
+                if (drugBase.status == Status.FORMULARY) {
+                    return getFormularyDrug(drugBase);
+                } else if (drugBase.status == Status.EXCLUDED) {
+                    return getExcludedDrug(drugBase);
+                } else {
+                    return getRestrictedDrug(drugBase);
+                }
             } else {
                 return null;
             }
@@ -376,6 +384,68 @@ public class SqlHelper extends SQLiteOpenHelper{
         }
         return null;
     }
+
+    private FormularyDrug getFormularyDrug(DrugBase drugBase) {
+        String drugTable = drugBase.nameType == NameType.GENERIC ? TABLE_FORMULARY_GENERIC : TABLE_FORMULARY_BRAND;
+        String queryName = drugBase.nameType == NameType.GENERIC ? KEY_FORM_GEN_NAME : KEY_FORM_BRAND_NAME;
+        String drugQuery = "SELECT * FROM " + drugTable + " WHERE " + queryName + " = ?";
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            Cursor cursor = db.rawQuery(drugQuery, new String[]{drugBase.primaryName.trim().toUpperCase()});
+            if (cursor.moveToFirst()) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<String>>(){}.getType();
+                drugBase.alternateNames = gson.fromJson(cursor.getString(1), type);
+                List<String> strengths = gson.fromJson(cursor.getString(2), type);
+                return new FormularyDrug(strengths, drugBase);
+            }
+        } catch (Exception e) {
+                Log.e(TAG, "Could not make formulary drug: " + drugBase.primaryName + ". Reason: " + e.getMessage());
+        }
+        return null;
+    }
+
+    private ExcludedDrug getExcludedDrug(DrugBase drugBase) {
+        String drugTable = drugBase.nameType == NameType.GENERIC ? TABLE_EXCLUDED_GENERIC : TABLE_EXCLUDED_BRAND;
+        String queryName = drugBase.nameType == NameType.GENERIC ? KEY_EXCL_GENERIC_NAME : KEY_EXCL_BRAND_NAME;
+        String drugQuery = "SELECT * FROM " + drugTable + " WHERE " + queryName + " = ?";
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            Cursor cursor = db.rawQuery(drugQuery, new String[]{drugBase.primaryName.trim().toUpperCase()});
+            if (cursor.moveToFirst()) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<String>>() {}.getType();
+                drugBase.alternateNames = gson.fromJson(cursor.getString(1), type);
+                String criteria = cursor.getString(2);
+                return new ExcludedDrug(criteria, drugBase);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Could not make excluded drug: " + drugBase.primaryName + ". Reason: " + e.getMessage());
+        }
+        return null;
+    }
+
+    private RestrictedDrug getRestrictedDrug(DrugBase drugBase) {
+        String drugTable = drugBase.nameType == NameType.GENERIC ? TABLE_RESTRICTED_GENERIC : TABLE_RESTRICTED_BRAND;
+        String queryName = drugBase.nameType == NameType.GENERIC ? KEY_REST_GENERIC_NAME : KEY_REST_BRAND_NAME;
+        String drugQuery = "SELECT * FROM " + drugTable + " WHERE " + queryName + " = ?";
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            Cursor cursor = db.rawQuery(drugQuery, new String[]{drugBase.primaryName.trim().toUpperCase()});
+            if (cursor.moveToFirst()) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<String>>() {}.getType();
+                drugBase.alternateNames = gson.fromJson(cursor.getString(1), type);
+                String criteria = cursor.getString(2);
+                return new RestrictedDrug(criteria, drugBase);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Could not make excluded drug: " + drugBase.primaryName + ". Reason: " + e.getMessage());
+        }
+        return null;
+    }
+
+
 
 //    //get drug count
 //    public int getDrugCount(){

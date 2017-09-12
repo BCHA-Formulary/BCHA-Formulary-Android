@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandDrugList;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Drug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericDrugList;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.DrugBase;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.ExcludedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.R;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.CSVparser;
@@ -210,7 +211,8 @@ public class MainActivity extends Activity {
 		//TODO check if search input is valid drug;
 
 //		SqlHelper sqlHelper = new SqlHelper(this);
-		mSqlHelper.queryDrug(searchInput);
+		DrugBase drugResult = mSqlHelper.queryDrug(searchInput);
+		Log.d(TAG, "Drug found " + drugResult);
 //
 //		if (genericList.containsGenericName(searchInput)) {
 //			drug = genericList.getGenericDrug(searchInput);

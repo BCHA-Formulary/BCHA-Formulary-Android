@@ -12,4 +12,9 @@ public class ExcludedDrug extends DrugBase {
         super(primaryName, nameType, alternateNames, drugClass, status);
         this.criteria = criteria;
     }
+
+    public ExcludedDrug(String criteria, DrugBase drugBase) {
+        super(drugBase);
+        this.criteria = criteria;
+    }
 }

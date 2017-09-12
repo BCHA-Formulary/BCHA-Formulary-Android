@@ -16,6 +16,14 @@ public class DrugBase {
 
     public DrugBase(){}
 
+    public DrugBase(DrugBase drug) {
+        this.primaryName = drug.primaryName;
+        this.nameType = drug.nameType;
+        this.alternateNames = drug.alternateNames;
+        this.drugClass = drug.drugClass;
+        this.status = drug.status;
+    }
+
     public DrugBase(String primaryName, NameType nameType, List<String> alternateNames, List<String> drugClass, Status status) {
         this.primaryName = primaryName;
         this.nameType = nameType;
