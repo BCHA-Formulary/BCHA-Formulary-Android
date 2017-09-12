@@ -34,7 +34,9 @@ public class SharedPrefManager {
     }
 
     public void putString(Key key, String val) {
-
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key.name(), val);
+        editor.apply();
     }
 
     public enum Key {

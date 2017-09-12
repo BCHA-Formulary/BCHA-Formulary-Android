@@ -94,7 +94,7 @@ public class SplashScreenActivity extends Activity {
             ValueEventListener updateEvent = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String firebaseTime = dataSnapshot.getValue().toString();
+                    final String firebaseTime = dataSnapshot.getValue().toString();
                     String lastUpdated;
                     try {
                         SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance();
@@ -109,12 +109,19 @@ public class SplashScreenActivity extends Activity {
                             public void onSuccess(List<DrugBase> drugList) {
                                 Log.d(TAG, "Drug count: " + drugList.size());
                                 SqlHelper sqlHelper = new SqlHelper(SplashScreenActivity.this);
+//                                List<String> n = sqlHelper.getAllDrugNames();
                                 sqlHelper.clearAllTables();
                                 sqlHelper.addAllDrug(drugList);
+                                try {
+                                    SharedPrefManager sharedPrefs = SharedPrefManager.getInstance();
+                                    sharedPrefs.putString(SharedPrefManager.Key.LAST_UPDATED, firebaseTime);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Could not save update: " + e.getMessage());
+                                }
                                 Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
                                 startActivity(searchActivity);
+                                finish();
                             }
-
                             @Override
                             public void onFailure(Throwable object) {
 
@@ -125,6 +132,7 @@ public class SplashScreenActivity extends Activity {
                         //firebase is up to date
                         Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
                         startActivity(searchActivity);
+                        finish();
                     }
 //                    Long time = Long.parseLong(firebaseTime);
 //                    Date lastUpdate = new Date(time);

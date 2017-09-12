@@ -5,16 +5,22 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.DrugBase;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.ExcludedDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.FormularyDrug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.NameType;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.RestrictedDrug;
+import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.Status;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by kelvinchan on 2016-06-28.
@@ -88,43 +94,43 @@ public class SqlHelper extends SQLiteOpenHelper{
                 + KEY_ENTRY_PRIMARY_NAME + " TEXT PRIMARY KEY,"
                 + KEY_ENTRY_NAME_TYPE + " TEXT,"
                 + KEY_ENTRY_STATUS + " TEXT,"
-                + KEY_ENTRY_CLASS + " TEXT" + ")";
+                + KEY_ENTRY_CLASS + " TEXT" + ");";
         db.execSQL(CREATE_DRUGS_TABLE);
 
         String CREATE_FORUMARLY_GEN_TABLE = "CREATE TABLE " + TABLE_FORMULARY_GENERIC + " ("
                 + KEY_FORM_GEN_NAME + " TEXT PRIMARY KEY,"
                 + KEY_FORM_GEN_ALT_NAME + " TEXT,"
-                + KEY_FORM_GEN_STRENGTH + "TEXT" + ")";
+                + KEY_FORM_GEN_STRENGTH + " TEXT" + ");";
         db.execSQL(CREATE_FORUMARLY_GEN_TABLE);
 
         String CREATE_FORUMARLY_BRAND_TABLE = "CREATE TABLE " + TABLE_FORMULARY_BRAND + " ("
                 + KEY_FORM_BRAND_NAME + " TEXT PRIMARY KEY,"
                 + KEY_FORM_BRAND_ALT_NAME + " TEXT,"
-                + KEY_FORM_BRAND_STRENGTH + " TEXT" + ")";
+                + KEY_FORM_BRAND_STRENGTH + " TEXT" + ");";
         db.execSQL(CREATE_FORUMARLY_BRAND_TABLE);
 
         String CREATE_EXCLUDED_GEN_TABLE = "CREATE TABLE " + TABLE_EXCLUDED_GENERIC + " ("
                 + KEY_EXCL_GENERIC_NAME + " TEXT PRIMARY KEY,"
                 + KEY_EXCL_GENERIC_ALT_NAME + " TEXT,"
-                + KEY_EXCL_GENERIC_CRITERIA + " TEXT" + ")";
+                + KEY_EXCL_GENERIC_CRITERIA + " TEXT" + ");";
         db.execSQL(CREATE_EXCLUDED_GEN_TABLE);
 
         String CREATE_EXCLUDED_BRAND_TABLE = "CREATE TABLE " + TABLE_EXCLUDED_BRAND + " ("
                 + KEY_EXCL_BRAND_NAME + " TEXT PRIMARY KEY,"
                 + KEY_EXCL_BRAND_ALT_NAME + " TEXT,"
-                + KEY_EXCL_BRAND_CRITERIA + " TEXT" + ")";
+                + KEY_EXCL_BRAND_CRITERIA + " TEXT" + ");";
         db.execSQL(CREATE_EXCLUDED_BRAND_TABLE);
 
         String CREATE_RESTRICTED_GEN_TABLE = "CREATE TABLE " + TABLE_RESTRICTED_GENERIC + " ("
                 + KEY_REST_GENERIC_NAME + " TEXT PRIMARY KEY,"
                 + KEY_REST_GENERIC_ALT_NAME + " TEXT,"
-                + KEY_REST_GENERIC_CRITERIA + " TEXT" + ")";
+                + KEY_REST_GENERIC_CRITERIA + " TEXT" + ");";
         db.execSQL(CREATE_RESTRICTED_GEN_TABLE);
 
         String CREATE_RESTRICTED_BRAND_TABLE = "CREATE TABLE " + TABLE_RESTRICTED_BRAND + " ("
                 + KEY_REST_BRAND_NAME + " TEXT PRIMARY KEY,"
                 + KEY_REST_BRAND_ALT_NAME + " TEXT,"
-                + KEY_REST_BRAND_CRITERIA + " TEXT" + ")";
+                + KEY_REST_BRAND_CRITERIA + " TEXT" + ");";
         db.execSQL(CREATE_RESTRICTED_BRAND_TABLE);
     }
 
@@ -341,7 +347,36 @@ public class SqlHelper extends SQLiteOpenHelper{
         db.close();
         return drugList;
     }
-//
+
+    public DrugBase queryDrug(String name){
+//        String drugQuery = "SELECT * FROM " + TABLE_DRUG_ENTRY + " WHERE " + KEY_ENTRY_PRIMARY_NAME + " = " + name.trim().toUpperCase();
+        String drugQuery = "SELECT * FROM " + TABLE_DRUG_ENTRY + " WHERE " + KEY_ENTRY_PRIMARY_NAME + " = ?";
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            Cursor cursor = db.rawQuery(drugQuery, new String[]{name.trim().toUpperCase()});
+
+            if (cursor.moveToFirst()) {
+                Gson gson = new Gson();
+                String primaryName = cursor.getString(0);
+                NameType nameType = NameType.valueOf(cursor.getString(1));
+                List<String> altNames = new ArrayList<>();
+
+                Status status = Status.valueOf(cursor.getString(2));
+
+                Type type = new TypeToken<ArrayList<String>>() {
+                }.getType();
+                List<String> drugClasses = gson.fromJson(cursor.getString(3), type);
+
+                DrugBase drugBase = new DrugBase(primaryName, nameType, altNames, drugClasses, status);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        }
+        return null;
+    }
+
 //    //get drug count
 //    public int getDrugCount(){
 //        SQLiteDatabase db = this.getReadableDatabase();

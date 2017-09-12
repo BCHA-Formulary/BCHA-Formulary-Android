@@ -43,11 +43,6 @@
         android:contentDescription="@string/button_description_help"
         android:onClick="displayHelp"
         android:src="@drawable/text2993" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="firebase"
-        android:onClick="firebase"/>
 
      <LinearLayout
         android:layout_width="match_parent"
@@ -73,6 +68,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
 	        android:onClick="displayResult"
+			android:layout_marginTop="10dp"
 	        android:text="@string/button_search" />
     
     </LinearLayout>
