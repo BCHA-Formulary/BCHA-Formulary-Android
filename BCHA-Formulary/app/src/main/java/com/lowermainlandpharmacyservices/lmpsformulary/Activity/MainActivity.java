@@ -2,6 +2,7 @@ package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.BrandDrugList;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Drug;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.GenericDrugList;
@@ -197,7 +199,6 @@ public class MainActivity extends Activity {
             }
 
         });
-		
 	}
 	
 	
@@ -212,7 +213,18 @@ public class MainActivity extends Activity {
 
 //		SqlHelper sqlHelper = new SqlHelper(this);
 		DrugBase drugResult = mSqlHelper.queryDrug(searchInput);
-		Log.d(TAG, "Drug found " + drugResult);
+		if (drugResult != null) {
+			Log.d(TAG, "Drug found " + drugResult);
+			Intent intent = new Intent(this, ResultsActivity.class);
+			Gson gson = new Gson();
+			String drugJson = gson.toJson(drugResult);
+			intent.putExtra(ResultsActivity.DRUG_INTENT, drugJson);
+			startActivity(intent);
+		} else {
+			Log.e(TAG, "Drug not found: " + searchInput);
+			//TODO
+		}
+
 //
 //		if (genericList.containsGenericName(searchInput)) {
 //			drug = genericList.getGenericDrug(searchInput);
