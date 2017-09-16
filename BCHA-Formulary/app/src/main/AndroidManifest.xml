@@ -31,23 +31,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MainActivity"></activity>
+        <activity android:name=".Activity.MainActivity" />
         <activity
             android:name=".Activity.DisplayFormularyResult"
-            android:label="@string/title_activity_display_formulary_result"></activity>
+            android:label="@string/title_activity_display_formulary_result" />
         <activity
             android:name=".Activity.DisplayRestrictedResult"
-            android:label="@string/title_activity_display_restricted_result"></activity>
+            android:label="@string/title_activity_display_restricted_result" />
         <activity
             android:name=".Activity.DisplayExcludedResult"
-            android:label="@string/title_activity_display_excluded_result"></activity>
+            android:label="@string/title_activity_display_excluded_result" />
         <activity
             android:name=".Activity.DisplayOtherResult"
-            android:label="@string/title_activity_display_other_result"></activity>
+            android:label="@string/title_activity_display_other_result" />
         <activity
             android:name=".Activity.HelpActivity"
-            android:label="@string/title_activity_help"></activity>
-        <activity android:name=".Activity.ResultsActivity"></activity>
+            android:label="@string/title_activity_help" />
+        <activity android:name=".Activity.ResultsActivity" />
+        <activity android:name=".Activity.DrugClassActivity"></activity>
     </application>
 
 </manifest>

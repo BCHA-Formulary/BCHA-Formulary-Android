@@ -16,6 +16,7 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.Formular
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.NameType;
 import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.Status;
 import com.lowermainlandpharmacyservices.lmpsformulary.R;
+import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.SqlHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -108,8 +109,14 @@ public class ResultsActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, drugClass);
+                    drugClassSearch(drugClass);
                 }
             });
         }
+    }
+
+    private void drugClassSearch(String drugClass) {
+        SqlHelper sqlHelper = new SqlHelper(this);
+        sqlHelper.getDrugNamesFromClass(drugClass);
     }
 }

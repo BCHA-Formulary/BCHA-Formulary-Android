@@ -42,6 +42,7 @@ public class SqlHelper extends SQLiteOpenHelper{
 
     //Drug table columns
     private static final String KEY_ENTRY_PRIMARY_NAME = "primary_id";
+    private static final String KEY_ENTRY_DRUG_NAME = "drugName";
     private static final String KEY_ENTRY_NAME_TYPE = "name_type";
     private static final String KEY_ENTRY_STATUS = "status";
     private static final String KEY_ENTRY_CLASS = "class";
@@ -80,7 +81,6 @@ public class SqlHelper extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         /**
@@ -91,7 +91,8 @@ public class SqlHelper extends SQLiteOpenHelper{
          *
          */
         String CREATE_DRUGS_TABLE = "CREATE TABLE " + TABLE_DRUG_ENTRY + " ("
-                + KEY_ENTRY_PRIMARY_NAME + " TEXT PRIMARY KEY,"
+                + KEY_ENTRY_PRIMARY_NAME + " INTEGER  PRIMARY KEY AUTOINCREMENT,"
+                + KEY_ENTRY_DRUG_NAME + " TEXT,"
                 + KEY_ENTRY_NAME_TYPE + " TEXT,"
                 + KEY_ENTRY_STATUS + " TEXT,"
                 + KEY_ENTRY_CLASS + " TEXT" + ");";
@@ -179,13 +180,15 @@ public class SqlHelper extends SQLiteOpenHelper{
     public void addAllDrug(List<DrugBase> allDrugs) {
         SQLiteDatabase db = this.getWritableDatabase();
         for(DrugBase drug: allDrugs) {
-            ContentValues values = new ContentValues();
-            values.put(KEY_ENTRY_PRIMARY_NAME, drug.primaryName);
-            values.put(KEY_ENTRY_NAME_TYPE, drug.nameType.name());
-            values.put(KEY_ENTRY_STATUS, drug.status.name());
-            values.put(KEY_ENTRY_CLASS, jsonifyList(drug.drugClass));
+            for (String drugClass: drug.drugClass) {
+                ContentValues values = new ContentValues();
+                values.put(KEY_ENTRY_DRUG_NAME, drug.primaryName);
+                values.put(KEY_ENTRY_NAME_TYPE, drug.nameType.name());
+                values.put(KEY_ENTRY_STATUS, drug.status.name());
+                values.put(KEY_ENTRY_CLASS, drugClass);
 
-            db.insert(TABLE_DRUG_ENTRY, null, values);
+                db.insert(TABLE_DRUG_ENTRY, null, values);
+            }
 
             if (drug instanceof FormularyDrug) {
                 addFormularyDrug((FormularyDrug) drug, db);
@@ -340,7 +343,7 @@ public class SqlHelper extends SQLiteOpenHelper{
 
         if (cursor.moveToFirst()) {
             do {
-                String primaryName = cursor.getString(0);
+                String primaryName = cursor.getString(1);
                 drugList.add(primaryName);
             } while (cursor.moveToNext());
         }
@@ -350,22 +353,28 @@ public class SqlHelper extends SQLiteOpenHelper{
 
     public DrugBase queryDrug(String name){
 //        String drugQuery = "SELECT * FROM " + TABLE_DRUG_ENTRY + " WHERE " + KEY_ENTRY_PRIMARY_NAME + " = " + name.trim().toUpperCase();
-        String drugQuery = "SELECT * FROM " + TABLE_DRUG_ENTRY + " WHERE " + KEY_ENTRY_PRIMARY_NAME + " = ?";
+        String drugQuery = "SELECT * FROM " + TABLE_DRUG_ENTRY + " WHERE " + KEY_ENTRY_DRUG_NAME + " = ?";
         SQLiteDatabase db = getReadableDatabase();
         try {
             Cursor cursor = db.rawQuery(drugQuery, new String[]{name.trim().toUpperCase()});
 
             if (cursor.moveToFirst()) {
                 Gson gson = new Gson();
-                String primaryName = cursor.getString(0);
-                NameType nameType = NameType.valueOf(cursor.getString(1));
+                String primaryName = cursor.getString(1);
+                NameType nameType = NameType.valueOf(cursor.getString(2));
                 List<String> altNames = new ArrayList<>();
+                String a = cursor.getString(3);
+                String b = cursor.getString(4);
+                Status status = Status.valueOf(cursor.getString(3));
 
-                Status status = Status.valueOf(cursor.getString(2));
-
-                Type type = new TypeToken<ArrayList<String>>() {
-                }.getType();
-                List<String> drugClasses = gson.fromJson(cursor.getString(3), type);
+                List<String> drugClasses = new ArrayList<>();
+                do {
+                    String drugClass = cursor.getString(4);
+                    drugClasses.add(drugClass);
+                } while (cursor.moveToNext());
+//                Type type = new TypeToken<ArrayList<String>>() {
+//                }.getType();
+//                List<String> drugClasses = gson.fromJson(cursor.getString(4), type);
 
                 DrugBase drugBase = new DrugBase(primaryName, nameType, altNames, drugClasses, status);
 
@@ -383,6 +392,29 @@ public class SqlHelper extends SQLiteOpenHelper{
             Log.e(TAG, e.getLocalizedMessage());
         }
         return null;
+    }
+
+    public List<String> getDrugNamesFromClass(String drugClass) {
+        String drugQuery = "SELECT * FROM " + TABLE_DRUG_ENTRY + " WHERE " + KEY_ENTRY_CLASS + " = ?";
+        SQLiteDatabase db = getReadableDatabase();
+        List<String> drugNameList = new ArrayList<>();
+        try {
+            Cursor cursor = db.rawQuery(drugQuery, new String[]{drugClass.trim().toUpperCase()});
+            if (cursor.moveToFirst()) {
+//                Gson gson = new Gson();
+//                Type type = new TypeToken<String>(){}.getType();
+                do {
+                    String drugName = cursor.getString(1);
+                    drugNameList.add(drugName);
+                } while (cursor.moveToNext());
+//                drugBase.alternateNames = gson.fromJson(cursor.getString(1), type);
+//                List<String> strengths = gson.fromJson(cursor.getString(2), type);
+//                return new FormularyDrug(strengths, drugBase);
+            }
+        }  catch (Exception e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        }
+        return drugNameList;
     }
 
     private FormularyDrug getFormularyDrug(DrugBase drugBase) {
