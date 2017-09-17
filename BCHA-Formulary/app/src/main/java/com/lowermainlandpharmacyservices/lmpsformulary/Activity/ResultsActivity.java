@@ -1,6 +1,7 @@
 package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -18,15 +19,20 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.Status;
 import com.lowermainlandpharmacyservices.lmpsformulary.R;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.SqlHelper;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.content.ContentValues.TAG;
+import static com.lowermainlandpharmacyservices.lmpsformulary.Activity.DrugClassActivity.DRUG_LIST_EXTRA;
 
 public class ResultsActivity extends Activity {
 
     public static final String DRUG_INTENT = "DRUG_EXTRA";
+    public static final int SELECT_DRUG_REQUEST = 1;
     DrugBase resultDrug;
+    private SqlHelper mSqlHelper;
 
     @BindView(R.id.altNameTitle) TextView altNamesTitle;
     @BindView(R.id.altNameList) TextView altNameList;
@@ -44,13 +50,19 @@ public class ResultsActivity extends Activity {
 
         ButterKnife.bind(this);
 
+        mSqlHelper = new SqlHelper(this);
         String drugData = getIntent().getStringExtra(DRUG_INTENT);
-        Gson gson = new Gson();
-        resultDrug = gson.fromJson(drugData, DrugBase.class);
-        if (resultDrug.status == Status.FORMULARY) {
-            FormularyDrug drug = gson.fromJson(drugData, FormularyDrug.class);
-            loadFormularyDrug(drug);
-        }
+        initializeDrugJson(drugData);
+//        Gson gson = new Gson();
+//        resultDrug = gson.fromJson(drugData, DrugBase.class);
+//        if (resultDrug.status == Status.FORMULARY) {
+//            FormularyDrug drug = gson.fromJson(drugData, FormularyDrug.class);
+//            loadFormularyDrug(drug);
+//        } else if (resultDrug.status == Status.EXCLUDED) {
+//
+//        } else {
+//
+//        }
     }
 
     @Override
@@ -115,8 +127,44 @@ public class ResultsActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SELECT_DRUG_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String drugResult = data.getStringExtra(DRUG_INTENT);
+                if (!drugResult.isEmpty()) {
+                    DrugBase drug = mSqlHelper.queryDrug(drugResult);
+                    if (drug.status == Status.FORMULARY) {
+                        loadFormularyDrug((FormularyDrug) drug);
+                    }
+                }
+            }
+        }
+    }
+
+    private void initializeDrugJson(String drugJson) {
+        Gson gson = new Gson();
+        resultDrug = gson.fromJson(drugJson, DrugBase.class);
+        if (resultDrug.status == Status.FORMULARY) {
+            FormularyDrug drug = gson.fromJson(drugJson, FormularyDrug.class);
+            loadFormularyDrug(drug);
+        } else if (resultDrug.status == Status.EXCLUDED) {
+
+        } else {
+
+        }
+    }
+
     private void drugClassSearch(String drugClass) {
-        SqlHelper sqlHelper = new SqlHelper(this);
-        sqlHelper.getDrugNamesFromClass(drugClass);
+        List<String> drugList = mSqlHelper.getDrugNamesFromClass(drugClass);
+        if (drugList.size() > 0) {
+            Intent intent = new Intent(this, DrugClassActivity.class);
+            Gson gson = new Gson();
+            String drugString = gson.toJson(drugList);
+            intent.putExtra(DRUG_LIST_EXTRA, drugString);
+            startActivityForResult(intent, SELECT_DRUG_REQUEST);
+        } else {
+            //TODO no results - "No other drugs with that drug class"
+        }
     }
 }

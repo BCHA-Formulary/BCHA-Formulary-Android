@@ -18,7 +18,9 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Model.Refactored.Status;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static android.content.ContentValues.TAG;
 
@@ -334,7 +336,7 @@ public class SqlHelper extends SQLiteOpenHelper{
 //        return drugList;
 //    }
     public List<String> getAllDrugNames() {
-        List<String> drugList = new ArrayList<>();
+        Set<String> drugNamesSet = new HashSet<>();
 
         String selectAllQuery = "SELECT * FROM " + TABLE_DRUG_ENTRY;
 
@@ -344,11 +346,11 @@ public class SqlHelper extends SQLiteOpenHelper{
         if (cursor.moveToFirst()) {
             do {
                 String primaryName = cursor.getString(1);
-                drugList.add(primaryName);
+                drugNamesSet.add(primaryName);
             } while (cursor.moveToNext());
         }
         db.close();
-        return drugList;
+        return new ArrayList<>(drugNamesSet);
     }
 
     public DrugBase queryDrug(String name){
@@ -395,7 +397,7 @@ public class SqlHelper extends SQLiteOpenHelper{
     }
 
     public List<String> getDrugNamesFromClass(String drugClass) {
-        String drugQuery = "SELECT * FROM " + TABLE_DRUG_ENTRY + " WHERE " + KEY_ENTRY_CLASS + " = ?";
+        String drugQuery = "SELECT " + KEY_ENTRY_DRUG_NAME + " FROM " + TABLE_DRUG_ENTRY + " WHERE " + KEY_ENTRY_CLASS + " = ?";
         SQLiteDatabase db = getReadableDatabase();
         List<String> drugNameList = new ArrayList<>();
         try {
@@ -404,7 +406,7 @@ public class SqlHelper extends SQLiteOpenHelper{
 //                Gson gson = new Gson();
 //                Type type = new TypeToken<String>(){}.getType();
                 do {
-                    String drugName = cursor.getString(1);
+                    String drugName = cursor.getString(0);
                     drugNameList.add(drugName);
                 } while (cursor.moveToNext());
 //                drugBase.alternateNames = gson.fromJson(cursor.getString(1), type);
