@@ -15,34 +15,37 @@
             android:id="@+id/altNameTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold"
             android:text="Generic Names:"
+            android:textSize="20sp"
             />
         <TextView
             android:id="@+id/altNameList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"/>
+            android:layout_marginTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:textSize="16sp"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"
                 android:text="Status:"
+                android:textSize="20sp"
                 />
             <TextView
                 android:id="@+id/drugStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:paddingStart="10dp"
                 android:textStyle="bold"
-                android:text="FORMULARY"/>
+                android:text="FORMULARY"
+                android:textSize="18sp"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/formularyStrengthsLayout"
@@ -54,19 +57,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/strengths"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
+                android:paddingStart="10dp"
                 android:text="@string/strengths_cont"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="14sp"/>
             <TextView
                 android:id="@+id/formulary_strength"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:textSize="16sp"
                 />
         </LinearLayout>
 
@@ -74,25 +80,34 @@
             android:id="@+id/nonFormularyLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:visibility="gone">
             <TextView
                 android:id="@+id/restriction_criteria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"/>
+                android:paddingStart="10dp"
+                android:paddingEnd="5dp"
+                android:textSize="16sp"/>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/drugClassLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"
-                android:text="Drug Classes:"/>
+                android:text="Drug Classes:"
+                android:layout_marginBottom="10dp"
+                android:textSize="20sp"/>
+            <LinearLayout
+                android:id="@+id/drugClassLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp"
+                />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

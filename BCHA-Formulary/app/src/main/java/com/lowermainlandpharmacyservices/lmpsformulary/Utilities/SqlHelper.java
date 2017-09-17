@@ -401,7 +401,7 @@ public class SqlHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = getReadableDatabase();
         List<String> drugNameList = new ArrayList<>();
         try {
-            Cursor cursor = db.rawQuery(drugQuery, new String[]{drugClass.trim().toUpperCase()});
+            Cursor cursor = db.rawQuery(drugQuery, new String[]{drugClass.toUpperCase()});
             if (cursor.moveToFirst()) {
 //                Gson gson = new Gson();
 //                Type type = new TypeToken<String>(){}.getType();

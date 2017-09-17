@@ -1,5 +1,6 @@
 package com.lowermainlandpharmacyservices.lmpsformulary.Activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -86,13 +87,17 @@ public class MainActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		getActionBar().hide();
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null)
+			actionBar.hide();
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		getActionBar().show();
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null)
+			actionBar.show();
 	}
 
 	@Override
