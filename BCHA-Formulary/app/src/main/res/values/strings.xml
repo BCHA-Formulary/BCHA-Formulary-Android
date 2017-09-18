@@ -35,5 +35,5 @@
     <string name="greetings_message">Welcome to the BCHA Formulary</string>
     <string name="password_helper">Input keyphrase to continue</string>
     <string name="authorize">Authorize my device</string>
-
+    <string name="drugNotFoundDescription">This drug appears to be a non-formulary drug. Please check your spelling and try again.\n\nIt may be undergoing a formal review to be included on the formulary at a later time.</string>
 </resources>

@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +27,6 @@ import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.SqlHelper;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.Utilities;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,46 +50,24 @@ public class SplashScreenActivity extends Activity {
     ChildEventListener restrictedListener;
     ValueEventListener completedListener;
 
+    MaterialDialog dialog;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_splash_screen);
-//		getActionBar().hide();
-
-//		settings = getApplicationContext().getSharedPreferences("foo", 0);
-
-		//Check internet status
-        if(!Utilities.isConnectedInternet(getApplicationContext())) {
-            //TODO make dialog message
-            Toast.makeText(this, "Internet connection is required for most up to date formulary information", Toast.LENGTH_LONG).show();
-        } else {
-
-        }
-
-		//pause to see the pretty splash screen
-//		new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-                initializeApp();
-//                finish();
-//            }
-//        }, PAUSE_MILLISECONDS);
+        initializeApp();
 	}
 
 	private void initializeApp(){
-//        String lastUpdated;
-////		assetManager = getAssets();
-//		//TODO start progress bar here
-//        try {
-//            SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance();
-//            lastUpdated = sharedPrefManager.getString(SharedPrefManager.Key.LAST_UPDATED, "");
-//        } catch (Exception e) {
-//            Log.d(TAG, "Could not get last update from pref");
-//            lastUpdated = "";
-//        }
         if(Utilities.isConnectedInternet(this)) {
+            dialog = new MaterialDialog.Builder(this)
+                    .title("Updating")
+                    .content("Please wait, app is downloading the latest Formulary list")
+                    .progress(true, 0)
+                    .show();
+
             DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
 
             ValueEventListener updateEvent = new ValueEventListener() {
@@ -102,6 +81,8 @@ public class SplashScreenActivity extends Activity {
                     } catch (Exception e) {
                         Log.d(TAG, "Could not get last update from pref");
                         lastUpdated = "";
+                        if (dialog != null)
+                            dialog.dismiss();
                     }
                     if (lastUpdated.isEmpty() || !lastUpdated.equals(firebaseTime)){
                         fetchUpdatedDrugs(firebaseTime, new GenericCallback<List<DrugBase>, Throwable>() {
@@ -109,7 +90,6 @@ public class SplashScreenActivity extends Activity {
                             public void onSuccess(List<DrugBase> drugList) {
                                 Log.d(TAG, "Drug count: " + drugList.size());
                                 SqlHelper sqlHelper = new SqlHelper(SplashScreenActivity.this);
-//                                List<String> n = sqlHelper.getAllDrugNames();
                                 sqlHelper.clearAllTables();
                                 sqlHelper.addAllDrug(drugList);
                                 try {
@@ -118,27 +98,46 @@ public class SplashScreenActivity extends Activity {
                                 } catch (Exception e) {
                                     Log.e(TAG, "Could not save update: " + e.getMessage());
                                 }
+                                if (dialog != null)
+                                    dialog.dismiss();
                                 Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
                                 startActivity(searchActivity);
                                 finish();
                             }
                             @Override
                             public void onFailure(Throwable object) {
-
+                                Log.e(TAG, "Could not get firebase updates: " + object.getMessage());
+                                new MaterialDialog.Builder(SplashScreenActivity.this)
+                                        .title("Update Error")
+                                        .content("There was an error retrieving updates. Please restart the app to get the latest updates.")
+                                        .positiveText("Enter offline mode")
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                dialog.dismiss();
+                                                Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
+                                                startActivity(searchActivity);
+                                            }
+                                        })
+                                        .negativeText("Quit app")
+                                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                dialog.dismiss();
+                                                finish();
+                                            }
+                                        }).show();
                             }
                         });
                     }
                     else {
                         //firebase is up to date
+                        if (dialog != null)
+                            dialog.dismiss();
                         Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
                         startActivity(searchActivity);
                         finish();
                     }
-//                    Long time = Long.parseLong(firebaseTime);
-//                    Date lastUpdate = new Date(time);
-//                    Date lastDeviceUpdate = SplashScreenActivity.this.getCurrentFileVersion();
-//                    if(lastUpdate.equals(lastDeviceUpdate))
-
                 }
 
                 @Override
@@ -149,22 +148,27 @@ public class SplashScreenActivity extends Activity {
             firebase.child("Update").addListenerForSingleValueEvent(updateEvent);
         } else {
             //Internet connection is not available
-
+            new MaterialDialog.Builder(this)
+                    .title("Network Error")
+                    .content("Internet connection is required to ensure the Formulary list is most up to date. Please restart the app to check for latest updates.")
+                    .positiveText("Enter offline mode")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                            Intent searchActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
+                            startActivity(searchActivity);
+                        }
+                    })
+                    .negativeText("Quit app")
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    }).show();
         }
-
-//
-//		//TODO stop progress bar here
-//		System.out.println("Initializing app in splash screen");
-//
-//		Intent searchActivity = new Intent(this, MainActivity.class);
-//		startActivity(searchActivity);
-//		System.out.println("startedmainactivity");
-
-	}
-
-	private Date getCurrentFileVersion() {
-        String lastDeviceUpdate = settings.getString("LAST_UPDATE", "0");
-        return new Date(Long.parseLong(lastDeviceUpdate));
 	}
 
 	private void fetchUpdatedDrugs(String updateVersion, final GenericCallback<List<DrugBase>, Throwable> callback) {
@@ -243,8 +247,6 @@ public class SplashScreenActivity extends Activity {
         excludedListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                    ExcludedDrug excludedDrug = dataSnapshot.getValue(ExcludedDrug.class);
-//                    excludedDrugList.add(excludedDrug);
                 try {
                     String primaryName = (String) dataSnapshot.child("primaryName").getValue();
                     NameType nameType = NameType.getNameType((String) dataSnapshot.child("nameType").getValue());
@@ -272,7 +274,6 @@ public class SplashScreenActivity extends Activity {
                     ExcludedDrug eDrug = new ExcludedDrug(primaryName, nameType, altNames, drugClasses, Status.EXCLUDED, criteria);
                     excludedDrugList.add(eDrug);
                     allDrugList.add(eDrug);
-//                    Log.d("Excluded Drug", "Drug: " + excludedDrug.getPrimaryName() + "Count: " + excludedDrugList.size());
                 }
                 catch (Exception e) {
                     Log.e(TAG, "Problem drug " + dataSnapshot.child("primaryName").getValue());
@@ -303,9 +304,6 @@ public class SplashScreenActivity extends Activity {
         restrictedListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                    RestrictedDrug restrictedDrug = dataSnapshot.getValue(RestrictedDrug.class);
-//                    restrictedDrugList.add(restrictedDrug);
-//                    Log.d("Restricted Drug", "Drug: " + restrictedDrug.getPrimaryName() + "Count: " + restrictedDrugList.size());
                 try {
                     String primaryName = (String) dataSnapshot.child("primaryName").getValue();
                     NameType nameType = NameType.getNameType((String) dataSnapshot.child("nameType").getValue());
@@ -365,18 +363,6 @@ public class SplashScreenActivity extends Activity {
         firebase.child("Excluded").addChildEventListener(excludedListener);
 
         firebase.child("Restricted").addChildEventListener(restrictedListener);
-            //TODO remove child listeners on view hiding
-            //TODO make sql tables
-            //TODO refactor all keys to string utils file
-//            editor.putString("LAST_UPDATE", updateVersion);
-//            editor.commit();
-//		} else { // if network is off
-//			Toast.makeText(
-//					this,
-//					"A version update is available, please connect to wi-fi "
-//							+ "and restart to app to update",
-//					Toast.LENGTH_LONG).show();
-//		}
 
         completedListener = new ValueEventListener() {
             @Override
@@ -398,5 +384,4 @@ public class SplashScreenActivity extends Activity {
         };
         firebase.child("Update").addListenerForSingleValueEvent(completedListener);
 	}
-
 }
