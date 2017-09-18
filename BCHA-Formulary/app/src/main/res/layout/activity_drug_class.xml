@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.lowermainlandpharmacyservices.lmpsformulary.Activity.DrugClassActivity">
-    <TextView
-        android:id="@+id/drugClassTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:text="Drug Classes Text" />
     <ListView
         android:id="@+id/drugClassListView"
         android:layout_width="match_parent"

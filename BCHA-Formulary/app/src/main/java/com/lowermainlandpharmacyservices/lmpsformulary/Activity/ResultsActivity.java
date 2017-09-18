@@ -60,16 +60,6 @@ public class ResultsActivity extends Activity {
         mSqlHelper = new SqlHelper(this);
         String drugData = getIntent().getStringExtra(DRUG_INTENT);
         initializeDrugJson(drugData);
-//        Gson gson = new Gson();
-//        resultDrug = gson.fromJson(drugData, DrugBase.class);
-//        if (resultDrug.status == Status.FORMULARY) {
-//            FormularyDrug drug = gson.fromJson(drugData, FormularyDrug.class);
-//            loadFormularyDrug(drug);
-//        } else if (resultDrug.status == Status.EXCLUDED) {
-//
-//        } else {
-//
-//        }
     }
 
     @Override
@@ -260,6 +250,7 @@ public class ResultsActivity extends Activity {
             Gson gson = new Gson();
             String drugString = gson.toJson(drugList);
             intent.putExtra(DRUG_LIST_EXTRA, drugString);
+            intent.putExtra(DrugClassActivity.DRUG_LIST_HEADER, drugClass);
             startActivityForResult(intent, SELECT_DRUG_REQUEST);
         } else {
             //TODO no results - "No other drugs with that drug class"
