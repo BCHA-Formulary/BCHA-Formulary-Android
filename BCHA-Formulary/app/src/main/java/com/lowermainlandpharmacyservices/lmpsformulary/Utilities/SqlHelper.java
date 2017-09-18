@@ -365,8 +365,6 @@ public class SqlHelper extends SQLiteOpenHelper{
                 String primaryName = cursor.getString(1);
                 NameType nameType = NameType.valueOf(cursor.getString(2));
                 List<String> altNames = new ArrayList<>();
-                String a = cursor.getString(3);
-                String b = cursor.getString(4);
                 Status status = Status.valueOf(cursor.getString(3));
 
                 List<String> drugClasses = new ArrayList<>();

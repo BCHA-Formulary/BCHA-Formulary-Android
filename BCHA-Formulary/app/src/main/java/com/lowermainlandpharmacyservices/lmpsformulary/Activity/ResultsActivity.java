@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -148,21 +146,18 @@ public class ResultsActivity extends Activity {
 
         for (final String drugClass : drug.drugClass) {
             TextView v = new TextView(this);
-            SpannableString content = new SpannableString("• " + drugClass);
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            v.setText(content);
-            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            v.setLayoutParams(llp);
-            drugClassLayout.addView(v);
-            v.setOnClickListener(new View.OnClickListener() {
+            String drugClassText = "• " + drugClass;
+            v.setMovementMethod(LinkMovementMethod.getInstance());
+            v.setText(drugClassText, TextView.BufferType.SPANNABLE);
+            Spannable mySpannable = (Spannable)v.getText();
+            ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
                     Log.d(TAG, drugClass);
                     drugClassSearch(drugClass);
                 }
-            });
+            };
+            mySpannable.setSpan(clickableSpan, 2, drugClassText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             drugClassLayout.addView(v);
             mDrugClassTextViews.add(v);
         }
@@ -190,21 +185,20 @@ public class ResultsActivity extends Activity {
 
         for (final String drugClass : drug.drugClass) {
             TextView v = new TextView(this);
-            SpannableString content = new SpannableString("• " + drugClass);
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            v.setText(content);
-            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            v.setLayoutParams(llp);
-            drugClassLayout.addView(v);
-            v.setOnClickListener(new View.OnClickListener() {
+            String drugClassText = "• " + drugClass;
+            v.setMovementMethod(LinkMovementMethod.getInstance());
+            v.setText(drugClassText, TextView.BufferType.SPANNABLE);
+            Spannable mySpannable = (Spannable)v.getText();
+            ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
                     Log.d(TAG, drugClass);
                     drugClassSearch(drugClass);
                 }
-            });
+            };
+            mySpannable.setSpan(clickableSpan, 2, drugClassText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            drugClassLayout.addView(v);
+            mDrugClassTextViews.add(v);
         }
     }
 
