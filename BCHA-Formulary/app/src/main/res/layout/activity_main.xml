@@ -63,7 +63,8 @@
 	        android:hint="@string/search_hint"
 	        android:textSize="22sp"
 	        android:inputType="text"
-	        android:padding="2dp" />
+	        android:paddingStart="10dp"
+			android:paddingEnd="10dp"/>
 	
 	    <Button
 	        android:layout_width="wrap_content"
