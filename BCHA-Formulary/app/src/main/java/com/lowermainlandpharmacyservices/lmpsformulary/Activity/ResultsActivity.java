@@ -76,7 +76,7 @@ public class ResultsActivity extends Activity {
         formularyStrengthsLayout.setVisibility(View.VISIBLE);
         nonFormularyLayout.setVisibility(View.GONE);
 
-        if (resultDrug.nameType == NameType.GENERIC) {
+        if (resultDrug.nameType == NameType.BRAND) {
             altNamesTitle.setText("Generic Names:");
         } else {
             altNamesTitle.setText("Brand Names:");
@@ -91,7 +91,10 @@ public class ResultsActivity extends Activity {
         drugStatus.setTextColor(Color.parseColor("#000000"));
         StringBuilder strengthsString = new StringBuilder();
         for (String strength: drug.strengths) {
-            strengthsString.append("• " + strength + "\n");
+            if (strength == null)
+                Log.d(TAG, "null string");
+            else
+                strengthsString.append("• " + strength + "\n");
         }
         formulary_strength.setText(strengthsString.toString());
 
