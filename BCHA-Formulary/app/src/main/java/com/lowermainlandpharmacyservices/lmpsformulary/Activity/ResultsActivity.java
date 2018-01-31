@@ -121,7 +121,7 @@ public class ResultsActivity extends Activity {
         formularyStrengthsLayout.setVisibility(View.GONE);
         nonFormularyLayout.setVisibility(View.VISIBLE);
 
-        if (resultDrug.nameType == NameType.GENERIC) {
+        if (resultDrug.nameType == NameType.BRAND) {
             altNamesTitle.setText("Generic Names:");
         } else {
             altNamesTitle.setText("Brand Names:");
@@ -160,7 +160,7 @@ public class ResultsActivity extends Activity {
         formularyStrengthsLayout.setVisibility(View.GONE);
         nonFormularyLayout.setVisibility(View.VISIBLE);
 
-        if (resultDrug.nameType == NameType.GENERIC) {
+        if (resultDrug.nameType == NameType.BRAND) {
             altNamesTitle.setText("Generic Names:");
         } else {
             altNamesTitle.setText("Brand Names:");
