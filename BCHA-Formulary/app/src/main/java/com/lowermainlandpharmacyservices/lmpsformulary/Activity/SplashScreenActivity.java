@@ -214,7 +214,7 @@ public class SplashScreenActivity extends Activity {
                         strengths = new ArrayList<>(strHash.values());
                     }
 
-                    FormularyDrug fDrug = new FormularyDrug(primaryName.toUpperCase(), nameType, altNames, drugClasses, Status.FORMULARY, strengths);
+                    FormularyDrug fDrug = new FormularyDrug(primaryName.toUpperCase().trim(), nameType, altNames, drugClasses, Status.FORMULARY, strengths);
                     formularyDrugList.add(fDrug);
                     allDrugList.add(fDrug);
                 }
@@ -271,7 +271,7 @@ public class SplashScreenActivity extends Activity {
 
                     String criteria = (String) dataSnapshot.child("criteria").getValue();
 
-                    ExcludedDrug eDrug = new ExcludedDrug(primaryName.toUpperCase(), nameType, altNames, drugClasses, Status.EXCLUDED, criteria);
+                    ExcludedDrug eDrug = new ExcludedDrug(primaryName.toUpperCase().trim(), nameType, altNames, drugClasses, Status.EXCLUDED, criteria);
                     excludedDrugList.add(eDrug);
                     allDrugList.add(eDrug);
                 }
@@ -328,7 +328,7 @@ public class SplashScreenActivity extends Activity {
 
                     String criteria = (String) dataSnapshot.child("criteria").getValue();
 
-                    RestrictedDrug rDrug = new RestrictedDrug(primaryName.toUpperCase(), nameType, altNames, drugClasses, Status.RESTRICTED, criteria);
+                    RestrictedDrug rDrug = new RestrictedDrug(primaryName.toUpperCase().trim(), nameType, altNames, drugClasses, Status.RESTRICTED, criteria);
                     restrictedDrugList.add(rDrug);
                     allDrugList.add(rDrug);
                 }

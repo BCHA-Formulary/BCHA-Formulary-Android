@@ -25,6 +25,7 @@ import com.lowermainlandpharmacyservices.lmpsformulary.R;
 import com.lowermainlandpharmacyservices.lmpsformulary.Utilities.SqlHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -81,15 +82,33 @@ public class ResultsActivity extends Activity {
         } else {
             altNamesTitle.setText("Brand Names:");
         }
+
+        //try to sort the alt names
+        try {
+            drug.alternateNames.removeAll(Collections.singleton(null));
+            Collections.sort(drug.alternateNames);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not sort: " + e.getMessage());
+        }
         StringBuilder altNameString = new StringBuilder();
         for (String altNames : drug.alternateNames) {
-            altNameString.append("• " + altNames + "\n");
+            if (altNames != null)
+                altNameString.append("• " + altNames + "\n");
         }
         altNameList.setText(altNameString.toString());
 
         drugStatus.setText(Status.FORMULARY.name());
         drugStatus.setTextColor(Color.parseColor("#000000"));
         StringBuilder strengthsString = new StringBuilder();
+
+        //try to sort the strengths
+        try {
+            drug.strengths.removeAll(Collections.singleton(null));
+            Collections.sort(drug.strengths);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not sort: " + e.getMessage());
+        }
+
         for (String strength: drug.strengths) {
             if (strength == null)
                 Log.d(TAG, "null string");
@@ -98,22 +117,32 @@ public class ResultsActivity extends Activity {
         }
         formulary_strength.setText(strengthsString.toString());
 
+        //try to sort the classes
+        try {
+            drug.drugClass.removeAll(Collections.singleton(null));
+            Collections.sort(drug.drugClass);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not sort: " + e.getMessage());
+        }
+
         for (final String drugClass : drug.drugClass) {
-            TextView v = new TextView(this);
-            String drugClassText = "• " + drugClass;
-            v.setMovementMethod(LinkMovementMethod.getInstance());
-            v.setText(drugClassText, TextView.BufferType.SPANNABLE);
-            Spannable mySpannable = (Spannable)v.getText();
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(TAG, drugClass);
-                    drugClassSearch(drugClass);
-                }
-            };
-            mySpannable.setSpan(clickableSpan, 2, drugClassText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            drugClassLayout.addView(v);
-            mDrugClassTextViews.add(v);
+            if (drugClass != null) {
+                TextView v = new TextView(this);
+                String drugClassText = "• " + drugClass;
+                v.setMovementMethod(LinkMovementMethod.getInstance());
+                v.setText(drugClassText, TextView.BufferType.SPANNABLE);
+                Spannable mySpannable = (Spannable) v.getText();
+                ClickableSpan clickableSpan = new ClickableSpan() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d(TAG, drugClass);
+                        drugClassSearch(drugClass);
+                    }
+                };
+                mySpannable.setSpan(clickableSpan, 2, drugClassText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                drugClassLayout.addView(v);
+                mDrugClassTextViews.add(v);
+            }
         }
     }
 
@@ -126,9 +155,20 @@ public class ResultsActivity extends Activity {
         } else {
             altNamesTitle.setText("Brand Names:");
         }
+
+        //try to sort the alt names
+        try {
+            drug.alternateNames.removeAll(Collections.singleton(null));
+            Collections.sort(drug.alternateNames);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not sort: " + e.getMessage());
+        }
         StringBuilder altNameString = new StringBuilder();
         for (String altNames : drug.alternateNames) {
-            altNameString.append("• " + altNames + "\n");
+            if (altNames == null)
+                Log.d(TAG, "Null alt names");
+            else
+                altNameString.append("• " + altNames + "\n");
         }
         altNameList.setText(altNameString.toString());
 
@@ -137,22 +177,31 @@ public class ResultsActivity extends Activity {
 
         restriction_criteria.setText(drug.criteria);
 
+        //try to sort the drugClass
+        try {
+            drug.drugClass.removeAll(Collections.singleton(null));
+            Collections.sort(drug.drugClass);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not sort: " + e.getMessage());
+        }
         for (final String drugClass : drug.drugClass) {
-            TextView v = new TextView(this);
-            String drugClassText = "• " + drugClass;
-            v.setMovementMethod(LinkMovementMethod.getInstance());
-            v.setText(drugClassText, TextView.BufferType.SPANNABLE);
-            Spannable mySpannable = (Spannable)v.getText();
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(TAG, drugClass);
-                    drugClassSearch(drugClass);
-                }
-            };
-            mySpannable.setSpan(clickableSpan, 2, drugClassText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            drugClassLayout.addView(v);
-            mDrugClassTextViews.add(v);
+            if (drugClass != null) {
+                TextView v = new TextView(this);
+                String drugClassText = "• " + drugClass;
+                v.setMovementMethod(LinkMovementMethod.getInstance());
+                v.setText(drugClassText, TextView.BufferType.SPANNABLE);
+                Spannable mySpannable = (Spannable) v.getText();
+                ClickableSpan clickableSpan = new ClickableSpan() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d(TAG, drugClass);
+                        drugClassSearch(drugClass);
+                    }
+                };
+                mySpannable.setSpan(clickableSpan, 2, drugClassText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                drugClassLayout.addView(v);
+                mDrugClassTextViews.add(v);
+            }
         }
     }
 
@@ -165,9 +214,20 @@ public class ResultsActivity extends Activity {
         } else {
             altNamesTitle.setText("Brand Names:");
         }
+
+        //try to sort the drugClass
+        try {
+            drug.alternateNames.removeAll(Collections.singleton(null));
+            Collections.sort(drug.alternateNames);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not sort: " + e.getMessage());
+        }
         StringBuilder altNameString = new StringBuilder();
         for (String altNames : drug.alternateNames) {
-            altNameString.append("• " + altNames + "\n");
+            if (altNames == null)
+                Log.d(TAG, "null alt name");
+            else
+                altNameString.append("• " + altNames + "\n");
         }
         altNameList.setText(altNameString.toString());
 
@@ -176,22 +236,31 @@ public class ResultsActivity extends Activity {
 
         restriction_criteria.setText(drug.criteria);
 
+        //try to sort the drugClass
+        try {
+            drug.drugClass.removeAll(Collections.singleton(null));
+            Collections.sort(drug.drugClass);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not sort: " + e.getMessage());
+        }
         for (final String drugClass : drug.drugClass) {
-            TextView v = new TextView(this);
-            String drugClassText = "• " + drugClass;
-            v.setMovementMethod(LinkMovementMethod.getInstance());
-            v.setText(drugClassText, TextView.BufferType.SPANNABLE);
-            Spannable mySpannable = (Spannable)v.getText();
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(TAG, drugClass);
-                    drugClassSearch(drugClass);
-                }
-            };
-            mySpannable.setSpan(clickableSpan, 2, drugClassText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            drugClassLayout.addView(v);
-            mDrugClassTextViews.add(v);
+            if (drugClass != null) {
+                TextView v = new TextView(this);
+                String drugClassText = "• " + drugClass;
+                v.setMovementMethod(LinkMovementMethod.getInstance());
+                v.setText(drugClassText, TextView.BufferType.SPANNABLE);
+                Spannable mySpannable = (Spannable) v.getText();
+                ClickableSpan clickableSpan = new ClickableSpan() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d(TAG, drugClass);
+                        drugClassSearch(drugClass);
+                    }
+                };
+                mySpannable.setSpan(clickableSpan, 2, drugClassText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                drugClassLayout.addView(v);
+                mDrugClassTextViews.add(v);
+            }
         }
     }
 
